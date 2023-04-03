@@ -1,17 +1,45 @@
-import { Text } from 'react-native';
 import React from 'react';
-import styled from 'styled-components/native';
-
-const Container = styled.View`
-   flex: 1;
-   background-color: black;
-`;
+import { TextInput } from 'react-native';
+import AuthLayout from '../../components/auth/auth-layout.component';
+import AuthButton from '../../components/auth/auth-button.component';
 
 const CreateAccount = () => {
    return (
-      <Container>
-         <Text>Register</Text>
-      </Container>
+      <AuthLayout>
+         <TextInput
+            placeholder='First Name'
+            placeholderTextColor='gray'
+            returnKeyType='next'
+            style={{ backgroundColor: 'white', width: '100%' }}
+         />
+         <TextInput
+            placeholder='Last Name'
+            placeholderTextColor='gray'
+            returnKeyType='next'
+            style={{ backgroundColor: 'white', width: '100%' }}
+         />
+         <TextInput
+            placeholder='Username'
+            placeholderTextColor='gray'
+            returnKeyType='next'
+            style={{ backgroundColor: 'white', width: '100%' }}
+         />
+         <TextInput
+            placeholder='Email'
+            placeholderTextColor='gray'
+            keyboardType='email-address'
+            returnKeyType='next'
+            style={{ backgroundColor: 'white', width: '100%' }}
+         />
+         <TextInput
+            placeholder='Password'
+            placeholderTextColor='gray'
+            secureTextEntry
+            returnKeyType='done'
+            style={{ backgroundColor: 'white', width: '100%' }}
+         />
+         <AuthButton text={'Create Account'} disabled={true} onPress={() => null} />
+      </AuthLayout>
    );
 };
 
