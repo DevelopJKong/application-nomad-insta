@@ -5,7 +5,7 @@ const Home = ({ navigation }: any) => {
    return (
       <View>
          <Text>Welcome</Text>
-         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+         <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <View>
                <Text>Go to Create Account</Text>
             </View>
