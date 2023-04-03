@@ -9,15 +9,20 @@ const Stack = createNativeStackNavigator();
 
 const Stacks = () => {
    return (
-      <Stack.Navigator
-         screenOptions={{
-            headerShown: false,
-         }}
-      >
-         <Stack.Screen name={'Welcome'} component={Welcome} />
+      <Stack.Navigator>
+         <Stack.Screen options={{ headerShown: false }} name={'Welcome'} component={Welcome} />
          <Stack.Screen name={'Home'} component={Home} />
          <Stack.Screen name={'Login'} component={Login} />
-         <Stack.Screen name={'CreateAccount'} component={CreateAccount} />
+         <Stack.Screen
+            options={{
+               headerTitle: () => false,
+               headerTransparent: false,
+               headerTintColor: 'white',
+               headerStyle: { backgroundColor: 'black' },
+            }}
+            name={'CreateAccount'}
+            component={CreateAccount}
+         />
       </Stack.Navigator>
    );
 };
