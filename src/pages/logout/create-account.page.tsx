@@ -1,23 +1,36 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import AuthLayout from '../../components/auth/auth-layout.component';
 import AuthButton from '../../components/auth/auth-button.component';
 import styled from 'styled-components/native';
-import { Platform } from 'react-native';
+import { Input } from '../../components/auth/auth-shared.component';
+import { useForm } from 'react-hook-form';
 
-const Input = styled.TextInput`
-   background-color: white;
-   width: 100%;
-`;
+interface IForm {
+   firstName: string;
+   lastName: string;
+   username: string;
+   email: string;
+   password: string;
+   result?: string;
+}
 
-const AvoidingView = styled.KeyboardAvoidingView`
+const AuthScrollView = styled.ScrollView.attrs((_props) => {
+   return {
+      contentContainerStyle: {
+         justifyContent: 'center',
+         alignItems: 'center',
+      },
+   };
+})`
    width: 100%;
 `;
 
 const CreateAccount = () => {
-   const lastNameRef: React.MutableRefObject<any> = useRef();
-   const usernameRef: React.MutableRefObject<any> = useRef();
-   const emailRef: React.MutableRefObject<any> = useRef();
-   const passwordRef: React.MutableRefObject<any> = useRef();
+   const { register, handleSubmit, setValue } = useForm<IForm>();
+   const lastNameRef: React.MutableRefObject<any> = useRef(null);
+   const usernameRef: React.MutableRefObject<any> = useRef(null);
+   const emailRef: React.MutableRefObject<any> = useRef(null);
+   const passwordRef: React.MutableRefObject<any> = useRef(null);
 
    const onNext = (nextOne: React.MutableRefObject<any>) => {
       nextOne?.current?.focus();
@@ -26,33 +39,33 @@ const CreateAccount = () => {
    const onDone = () => {
       alert('done!');
    };
+
+   useEffect(() => {
+      register('firstName');
+      register('lastName');
+      register('username');
+      register('email');
+      register('password');
+   }, [register]);
    return (
       <AuthLayout>
-         <AvoidingView behavior={'padding'} keyboardVerticalOffset={Platform.OS === 'ios' ? 30 : 0}>
-            <Input
-               placeholder='First Name'
-               placeholderTextColor='gray'
-               returnKeyType='next'
-               onSubmitEditing={() => onNext(lastNameRef)}
-            />
+         <AuthScrollView>
+            <Input placeholder='First Name' returnKeyType='next' onSubmitEditing={() => onNext(lastNameRef)} />
             <Input
                ref={lastNameRef}
                placeholder='Last Name'
-               placeholderTextColor='gray'
                returnKeyType='next'
                onSubmitEditing={() => onNext(usernameRef)}
             />
             <Input
                ref={usernameRef}
                placeholder='Username'
-               placeholderTextColor='gray'
                returnKeyType='next'
                onSubmitEditing={() => onNext(emailRef)}
             />
             <Input
                ref={emailRef}
                placeholder='Email'
-               placeholderTextColor='gray'
                keyboardType='email-address'
                returnKeyType='next'
                onSubmitEditing={() => onNext(passwordRef)}
@@ -60,13 +73,13 @@ const CreateAccount = () => {
             <Input
                ref={passwordRef}
                placeholder='Password'
-               placeholderTextColor='gray'
                secureTextEntry
                returnKeyType='done'
                onSubmitEditing={onDone}
+               $lastOne={true}
             />
             <AuthButton text={'Create Account'} disabled={false} onPress={() => null} />
-         </AvoidingView>
+         </AuthScrollView>
       </AuthLayout>
    );
 };

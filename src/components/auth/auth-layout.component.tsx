@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { Keyboard } from 'react-native';
+import { Keyboard, Platform } from 'react-native';
 
 interface IAuthLayout {
    children: React.ReactNode;
@@ -22,6 +22,7 @@ const Logo = styled.Image`
    max-width: 50%;
    width: 100%;
    height: 100px;
+   margin-top: 120px;
    margin-bottom: 20px;
 `;
 
@@ -30,7 +31,7 @@ const AuthLayout = ({ children }: IAuthLayout) => {
       Keyboard.dismiss();
    };
    return (
-      <ContainerWrapper onPress={dismissKeyboard}>
+      <ContainerWrapper onPress={dismissKeyboard} disabled={Platform.OS === 'web'}>
          <Container>
             <Logo resizeMode={'center'} source={require('../../../assets/logo.png')} />
             {children}

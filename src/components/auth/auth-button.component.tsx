@@ -10,7 +10,7 @@ interface IAuthButton {
 
 const ButtonAccount = styled.TouchableOpacity`
    background-color: ${colors.blue};
-   padding: 7px 15px;
+   padding: 15px 10px;
    margin-top: 10px;
    border-radius: 3px;
    width: 100%;
