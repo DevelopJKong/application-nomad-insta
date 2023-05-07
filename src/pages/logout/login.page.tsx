@@ -33,7 +33,7 @@ const LOGIN_MUTATION = gql`
    }
 `;
 
-const Login = () => {
+const Login = ({ route: { params } }: any) => {
    const {
       register,
       handleSubmit,
@@ -41,13 +41,18 @@ const Login = () => {
       formState: { errors },
       clearErrors,
       watch,
-   } = useForm<IForm>();
+   } = useForm<IForm>({
+      defaultValues: {
+         email: params?.email,
+         password: params?.password,
+      },
+   });
 
    const passwordRef: React.MutableRefObject<any> = useRef(null);
 
    const onCompleted = (data: loginMutation) => {
       const {
-         login: { ok, error, token },
+         login: { ok },
       } = data;
       if (ok) {
          isLoggedInVar(true);
@@ -95,6 +100,7 @@ const Login = () => {
    return (
       <AuthLayout>
          <Input
+            value={watch('email')}
             placeholder='Email'
             returnKeyType='next'
             autoCapitalize={'none'}
@@ -110,6 +116,7 @@ const Login = () => {
             </ErrorBox>
          )}
          <Input
+            value={watch('password')}
             ref={passwordRef}
             placeholder='Password'
             returnKeyType='done'

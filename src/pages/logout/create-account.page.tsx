@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react';
+import { gql, useMutation } from '@apollo/client';
 import AuthLayout from '../../components/auth/auth-layout.component';
 import AuthButton from '../../components/auth/auth-button.component';
 import styled from 'styled-components/native';
 import { Input } from '../../components/auth/auth-shared.component';
 import { useForm } from 'react-hook-form';
+import { createUserMutation } from '../../__generated__/createUserMutation';
+import { useNavigation } from '@react-navigation/native';
 
 interface IForm {
    firstName: string;
@@ -25,23 +28,54 @@ const AuthScrollView = styled.ScrollView.attrs((_props) => {
    width: 100%;
 `;
 
-const CreateAccount = () => {
-   const { register, handleSubmit, setValue } = useForm<IForm>();
+const CREATE_USER_MUTATION = gql`
+   mutation createUserMutation($createUserInput: CreateUserInput!) {
+      createUser(input: $createUserInput) {
+         ok
+         error
+      }
+   }
+`;
+
+const CreateAccount = ({ navigation }: any) => {
+   const { register, handleSubmit, setValue, getValues, watch } = useForm<IForm>();
    const lastNameRef: React.MutableRefObject<any> = useRef(null);
    const usernameRef: React.MutableRefObject<any> = useRef(null);
    const emailRef: React.MutableRefObject<any> = useRef(null);
    const passwordRef: React.MutableRefObject<any> = useRef(null);
 
+   const onCompleted = (data: createUserMutation) => {
+      const {
+         createUser: { ok },
+      } = data;
+
+      const { email, password } = getValues();
+      if (ok) {
+         navigation.navigate('Login', {
+            email,
+            password,
+         });
+      }
+   };
+
+   const [createUserMutation, { loading }] = useMutation<createUserMutation>(CREATE_USER_MUTATION, {
+      onCompleted,
+   });
+
+   const onValid = (data: IForm) => {
+      if (!loading) {
+         createUserMutation({
+            variables: {
+               createUserInput: {
+                  ...data,
+               },
+            },
+         });
+      }
+   };
+
    const onNext = (nextOne: React.MutableRefObject<any>) => {
       nextOne?.current?.focus();
-   };
-
-   const onDone = () => {
-      alert('done!');
-   };
-
-   const onSubmit = (data: IForm) => {
-      console.log(data);
    };
 
    useEffect(() => {
@@ -112,10 +146,10 @@ const CreateAccount = () => {
                placeholder='Password'
                secureTextEntry
                returnKeyType='done'
-               onSubmitEditing={handleSubmit(onSubmit)}
+               onSubmitEditing={handleSubmit(onValid)}
                $lastOne={true}
             />
-            <AuthButton text={'Create Account'} disabled={false} onPress={handleSubmit(onSubmit)} />
+            <AuthButton text={'Create Account'} disabled={false} onPress={handleSubmit(onValid)} />
          </AuthScrollView>
       </AuthLayout>
    );
