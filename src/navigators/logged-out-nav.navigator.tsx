@@ -7,7 +7,7 @@ import Welcome from '../pages/logout/welcome.page';
 
 const Stack = createNativeStackNavigator();
 
-const Stacks = () => {
+const LoggedOutNav = () => {
    return (
       <Stack.Navigator
          screenOptions={{
@@ -17,7 +17,7 @@ const Stacks = () => {
             headerTintColor: 'white',
          }}
       >
-         <Stack.Screen options={{ headerShown: false }} name={'Welcome'} component={Welcome} />
+         <Stack.Screen name={'Welcome'} component={Welcome} />
          <Stack.Screen name={'Home'} component={Home} />
          <Stack.Screen name={'Login'} component={Login} />
          <Stack.Screen options={{}} name={'CreateAccount'} component={CreateAccount} />
@@ -25,4 +25,4 @@ const Stacks = () => {
    );
 };
 
-export default Stacks;
+export default LoggedOutNav;

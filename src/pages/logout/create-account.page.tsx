@@ -40,28 +40,64 @@ const CreateAccount = () => {
       alert('done!');
    };
 
+   const onSubmit = (data: IForm) => {
+      console.log(data);
+   };
+
    useEffect(() => {
-      register('firstName');
-      register('lastName');
-      register('username');
-      register('email');
-      register('password');
+      register('firstName', {
+         required: {
+            value: true,
+            message: 'First name is required',
+         },
+      });
+      register('lastName', {
+         required: {
+            value: true,
+            message: 'Last name is required',
+         },
+      });
+      register('username', {
+         required: {
+            value: true,
+            message: 'Username is required',
+         },
+      });
+      register('email', {
+         required: {
+            value: true,
+            message: 'Email is required',
+         },
+      });
+      register('password', {
+         required: {
+            value: true,
+            message: 'Password is required',
+         },
+      });
    }, [register]);
    return (
       <AuthLayout>
          <AuthScrollView>
-            <Input placeholder='First Name' returnKeyType='next' onSubmitEditing={() => onNext(lastNameRef)} />
+            <Input
+               placeholder='First Name'
+               returnKeyType='next'
+               onSubmitEditing={() => onNext(lastNameRef)}
+               onChangeText={(text) => setValue('firstName', text)}
+            />
             <Input
                ref={lastNameRef}
                placeholder='Last Name'
                returnKeyType='next'
                onSubmitEditing={() => onNext(usernameRef)}
+               onChangeText={(text) => setValue('lastName', text)}
             />
             <Input
                ref={usernameRef}
                placeholder='Username'
                returnKeyType='next'
                onSubmitEditing={() => onNext(emailRef)}
+               onChangeText={(text) => setValue('username', text)}
             />
             <Input
                ref={emailRef}
@@ -69,16 +105,17 @@ const CreateAccount = () => {
                keyboardType='email-address'
                returnKeyType='next'
                onSubmitEditing={() => onNext(passwordRef)}
+               onChangeText={(text) => setValue('email', text)}
             />
             <Input
                ref={passwordRef}
                placeholder='Password'
                secureTextEntry
                returnKeyType='done'
-               onSubmitEditing={onDone}
+               onSubmitEditing={handleSubmit(onSubmit)}
                $lastOne={true}
             />
-            <AuthButton text={'Create Account'} disabled={false} onPress={() => null} />
+            <AuthButton text={'Create Account'} disabled={false} onPress={handleSubmit(onSubmit)} />
          </AuthScrollView>
       </AuthLayout>
    );

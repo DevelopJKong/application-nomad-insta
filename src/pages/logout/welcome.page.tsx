@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native';
 import { colors } from '../../styled';
 import AuthLayout from '../../components/auth/auth-layout.component';
 import AuthButton from '../../components/auth/auth-button.component';
+import { gql, useQuery } from '@apollo/client';
 
 const LoginLink = styled.Text`
    color: ${colors.blue};
@@ -12,6 +13,14 @@ const LoginLink = styled.Text`
 `;
 
 const Welcome = ({ navigation }: any) => {
+   const HEALTH_CHECK = gql`
+      query healthCheck {
+         hi {
+            ok
+         }
+      }
+   `;
+   useQuery(HEALTH_CHECK);
    const goToCreateAccount = () => navigation.navigate('CreateAccount');
    const goToLogin = () => navigation.navigate('Login');
 

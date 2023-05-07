@@ -3,20 +3,24 @@
    "version": "1.0.0",
    "main": "node_modules/expo/AppEntry.js",
    "scripts": {
-      "start": "expo start",
+      "start": "npm run lint && npm run apollo:codegen && expo start",
+      "apollo:codegen": "rimraf src/__generated__ && npx apollo client:codegen src/__generated__ --target=typescript --outputFlat",
       "android": "expo start --android",
       "ios": "expo start --ios",
       "web": "expo start --web",
       "lint": "eslint \"{src,apps,libs,test}/**/*.{tsx,js,ts}\" --fix"
    },
    "dependencies": {
+      "@apollo/client": "^3.7.14",
       "@expo/webpack-config": "^18.0.1",
       "@react-navigation/bottom-tabs": "^6.5.7",
       "@react-navigation/native": "^6.1.6",
       "@react-navigation/native-stack": "^6.9.12",
+      "apollo": "^2.34.0",
       "expo": "~48.0.9",
       "expo-splash-screen": "^0.18.1",
       "expo-status-bar": "~1.4.4",
+      "graphql": "^15.8.0",
       "react": "18.2.0",
       "react-dom": "18.2.0",
       "react-hook-form": "^7.43.9",
@@ -29,6 +33,23 @@
       "react-native-webview": "^11.26.1",
       "react-query": "^3.39.3",
       "styled-components": "^5.3.9"
+   },
+   "overrides": {
+      "@apollo/client": {
+         "react": "$react"
+      },
+      "@apollographql/graphql-language-service-interface": {
+         "graphql": "$graphql"
+      },
+      "@apollographql/graphql-language-service-parser": {
+         "graphql": "$graphql"
+      },
+      "@apollographql/graphql-language-service-types": {
+         "graphql": "$graphql"
+      },
+      "@apollographql/graphql-language-service-utils": {
+         "graphql": "$graphql"
+      }
    },
    "devDependencies": {
       "@babel/core": "^7.20.0",

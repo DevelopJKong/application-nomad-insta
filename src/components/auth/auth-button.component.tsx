@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../styled';
+import { ActivityIndicator } from 'react-native';
 
 interface IAuthButton {
    onPress: () => void;
    disabled?: boolean;
    text: string;
+   loading?: boolean;
 }
 
 const ButtonAccount = styled.TouchableOpacity`
@@ -23,10 +25,10 @@ const ButtonAccountText = styled.Text`
    text-align: center;
 `;
 
-const AuthButton = ({ onPress, disabled, text }: IAuthButton) => {
+const AuthButton = ({ onPress, disabled, text, loading }: IAuthButton) => {
    return (
       <ButtonAccount disabled={disabled} onPress={onPress}>
-         <ButtonAccountText>{text}</ButtonAccountText>
+         {loading ? <ActivityIndicator color={'white'} /> : <ButtonAccountText>{text}</ButtonAccountText>}
       </ButtonAccount>
    );
 };
