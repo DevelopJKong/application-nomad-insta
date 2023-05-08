@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components/native';
 import { gql, useMutation } from '@apollo/client';
 import { loginMutation, loginMutationVariables } from '../../__generated__/loginMutation';
-import { isLoggedInVar } from '../../apollo';
+import { logUserIn } from '../../apollo';
 
 interface IForm {
    email: string;
@@ -23,7 +23,7 @@ const ErrorText = styled.Text`
    margin-bottom: 10px;
 `;
 
-const LOGIN_MUTATION = gql`
+export const LOGIN_MUTATION = gql`
    mutation loginMutation($loginInput: LoginInput!) {
       login(input: $loginInput) {
          ok
@@ -32,7 +32,6 @@ const LOGIN_MUTATION = gql`
       }
    }
 `;
-
 const Login = ({ route: { params } }: any) => {
    const {
       register,
@@ -50,12 +49,13 @@ const Login = ({ route: { params } }: any) => {
 
    const passwordRef: React.MutableRefObject<any> = useRef(null);
 
-   const onCompleted = (data: loginMutation) => {
+   const onCompleted = async (data: loginMutation) => {
+      console.log(data);
       const {
-         login: { ok },
+         login: { ok, token },
       } = data;
-      if (ok) {
-         isLoggedInVar(true);
+      if (ok && token) {
+         await logUserIn(token);
       }
    };
 
@@ -68,11 +68,12 @@ const Login = ({ route: { params } }: any) => {
    };
 
    const onValid = async ({ email, password }: IForm) => {
-      if (loading) {
-         return;
-      }
+      if (loading) return;
+      console.log(loading);
+      console.log(email);
+      console.log(password);
 
-      loginMutation({
+      await loginMutation({
          variables: {
             loginInput: {
                email,
