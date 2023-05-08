@@ -5,13 +5,11 @@ import AuthButton from '../../components/auth/auth-button.component';
 import styled from 'styled-components/native';
 import { Input } from '../../components/auth/auth-shared.component';
 import { useForm } from 'react-hook-form';
-import { createUserMutation } from '../../__generated__/createUserMutation';
-import { useNavigation } from '@react-navigation/native';
+import { createUserMutation, createUserMutationVariables } from '../../__generated__/createUserMutation';
 
 interface IForm {
    firstName: string;
    lastName: string;
-   username: string;
    email: string;
    password: string;
    result?: string;
@@ -40,7 +38,6 @@ const CREATE_USER_MUTATION = gql`
 const CreateAccount = ({ navigation }: any) => {
    const { register, handleSubmit, setValue, getValues, watch } = useForm<IForm>();
    const lastNameRef: React.MutableRefObject<any> = useRef(null);
-   const usernameRef: React.MutableRefObject<any> = useRef(null);
    const emailRef: React.MutableRefObject<any> = useRef(null);
    const passwordRef: React.MutableRefObject<any> = useRef(null);
 
@@ -58,20 +55,23 @@ const CreateAccount = ({ navigation }: any) => {
       }
    };
 
-   const [createUserMutation, { loading }] = useMutation<createUserMutation>(CREATE_USER_MUTATION, {
-      onCompleted,
-   });
+   const [createUserMutation, { loading }] = useMutation<createUserMutation, createUserMutationVariables>(
+      CREATE_USER_MUTATION,
+      {
+         onCompleted,
+      },
+   );
 
-   const onValid = (data: IForm) => {
-      if (!loading) {
-         createUserMutation({
-            variables: {
-               createUserInput: {
-                  ...data,
-               },
+   const onValid = async (data: IForm) => {
+      if (loading) return;
+
+      await createUserMutation({
+         variables: {
+            createUserInput: {
+               ...data,
             },
-         });
-      }
+         },
+      });
    };
 
    const onNext = (nextOne: React.MutableRefObject<any>) => {
@@ -91,12 +91,7 @@ const CreateAccount = ({ navigation }: any) => {
             message: 'Last name is required',
          },
       });
-      register('username', {
-         required: {
-            value: true,
-            message: 'Username is required',
-         },
-      });
+
       register('email', {
          required: {
             value: true,
@@ -123,16 +118,10 @@ const CreateAccount = ({ navigation }: any) => {
                ref={lastNameRef}
                placeholder='Last Name'
                returnKeyType='next'
-               onSubmitEditing={() => onNext(usernameRef)}
+               onSubmitEditing={() => onNext(emailRef)}
                onChangeText={(text) => setValue('lastName', text)}
             />
-            <Input
-               ref={usernameRef}
-               placeholder='Username'
-               returnKeyType='next'
-               onSubmitEditing={() => onNext(emailRef)}
-               onChangeText={(text) => setValue('username', text)}
-            />
+
             <Input
                ref={emailRef}
                placeholder='Email'
@@ -146,10 +135,16 @@ const CreateAccount = ({ navigation }: any) => {
                placeholder='Password'
                secureTextEntry
                returnKeyType='done'
+               onChangeText={(text) => setValue('password', text)}
                onSubmitEditing={handleSubmit(onValid)}
                $lastOne={true}
             />
-            <AuthButton text={'Create Account'} disabled={false} onPress={handleSubmit(onValid)} />
+            <AuthButton
+               text={'Create Account'}
+               disabled={!watch('firstName') || !watch('lastName') || !watch('email') || !watch('password')}
+               loading={loading}
+               onPress={handleSubmit(onValid)}
+            />
          </AuthScrollView>
       </AuthLayout>
    );
