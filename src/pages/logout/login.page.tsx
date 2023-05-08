@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components/native';
 import { gql, useMutation } from '@apollo/client';
 import { loginMutation, loginMutationVariables } from '../../__generated__/loginMutation';
-import { isLoggedInVar } from '../../apollo';
+import { isLoggedInVar, logUserIn } from '../../apollo';
 
 interface IForm {
    email: string;
@@ -50,12 +50,12 @@ const Login = ({ route: { params } }: any) => {
 
    const passwordRef: React.MutableRefObject<any> = useRef(null);
 
-   const onCompleted = (data: loginMutation) => {
+   const onCompleted = async (data: loginMutation) => {
       const {
-         login: { ok },
+         login: { ok, token },
       } = data;
-      if (ok) {
-         isLoggedInVar(true);
+      if (ok && token) {
+         await logUserIn(token);
       }
    };
 
@@ -72,7 +72,7 @@ const Login = ({ route: { params } }: any) => {
          return;
       }
 
-      loginMutation({
+      await loginMutation({
          variables: {
             loginInput: {
                email,
