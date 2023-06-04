@@ -12,7 +12,7 @@ const SText = styled.Text`
    color: white;
 `;
 
-const Feed = () => {
+const Notifications = () => {
    return (
       <Container>
          <SText>HELLO</SText>
@@ -20,4 +20,4 @@ const Feed = () => {
    );
 };
 
-export default Feed;
+export default Notifications;

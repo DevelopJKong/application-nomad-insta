@@ -1,4 +1,5 @@
 import React from 'react';
+
 import styled from 'styled-components/native';
 
 const Container = styled.View`
@@ -12,12 +13,12 @@ const SText = styled.Text`
    color: white;
 `;
 
-const Feed = () => {
+const Profile = () => {
    return (
       <Container>
-         <SText>HELLO</SText>
+         <SText>Profile</SText>
       </Container>
    );
 };
 
-export default Feed;
+export default Profile;

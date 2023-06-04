@@ -12,12 +12,12 @@ const SText = styled.Text`
    color: white;
 `;
 
-const Feed = () => {
+const Search = () => {
    return (
       <Container>
-         <SText>HELLO</SText>
+         <SText>Search</SText>
       </Container>
    );
 };
 
-export default Feed;
+export default Search;
