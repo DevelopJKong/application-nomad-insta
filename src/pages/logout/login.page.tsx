@@ -33,6 +33,7 @@ export const LOGIN_MUTATION = gql`
       }
    }
 `;
+
 const Login = ({ route: { params } }: any) => {
    const {
       register,
