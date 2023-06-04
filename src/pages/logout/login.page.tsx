@@ -7,6 +7,7 @@ import styled from 'styled-components/native';
 import { gql, useMutation } from '@apollo/client';
 import { loginMutation, loginMutationVariables } from '../../__generated__/loginMutation';
 import { logUserIn } from '../../apollo';
+import * as SecureStore from 'expo-secure-store';
 
 interface IForm {
    email: string;
@@ -69,9 +70,6 @@ const Login = ({ route: { params } }: any) => {
 
    const onValid = async ({ email, password }: IForm) => {
       if (loading) return;
-      console.log(loading);
-      console.log(email);
-      console.log(password);
 
       await loginMutation({
          variables: {
@@ -81,6 +79,13 @@ const Login = ({ route: { params } }: any) => {
             },
          },
       });
+
+      try {
+         await SecureStore.setItemAsync('id', email);
+         await SecureStore.setItemAsync('pw', password);
+      } catch (ignored) {
+         /* empty */
+      }
    };
 
    useEffect(() => {

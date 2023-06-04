@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
 import { colors } from '../../styled';
 import AuthLayout from '../../components/auth/auth-layout.component';
 import AuthButton from '../../components/auth/auth-button.component';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
+import { logUserIn } from '../../apollo';
+import { loginMutation, loginMutationVariables } from '../../__generated__/loginMutation';
+import { LOGIN_MUTATION } from './login.page';
+import * as SecureStore from 'expo-secure-store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginLink = styled.Text`
    color: ${colors.blue};
@@ -23,6 +28,53 @@ const Welcome = ({ navigation }: any) => {
    useQuery(HEALTH_CHECK);
    const goToCreateAccount = () => navigation.navigate('CreateAccount');
    const goToLogin = () => navigation.navigate('Login');
+
+   const onCompleted = async (data: loginMutation) => {
+      const {
+         login: { ok, token },
+      } = data;
+      if (ok && token) {
+         await logUserIn(token);
+      }
+   };
+
+   const [loginMutation, { loading }] = useMutation<loginMutation, loginMutationVariables>(LOGIN_MUTATION, {
+      onCompleted,
+   });
+
+   useLayoutEffect(() => {
+      console.log('here');
+      async function autoLogin() {
+         try {
+            const id = await SecureStore.getItemAsync('id');
+            const pw = await SecureStore.getItemAsync('pw');
+            console.log(id);
+            console.log(pw);
+            if (loading) return;
+            if (id && pw) {
+               await loginMutation({
+                  variables: {
+                     loginInput: {
+                        email: id,
+                        password: pw,
+                     },
+                  },
+               });
+               await AsyncStorage.setItem(LOGIN_KEY, JSON.stringify({ id, pw }));
+            } else {
+               throw new Error('로그인 실패');
+            }
+         } catch (error) {
+            try {
+               await SecureStore.deleteItemAsync('id');
+               await SecureStore.deleteItemAsync('pw');
+            } catch (ignored) {
+               /* empty */
+            }
+         }
+      }
+      autoLogin();
+   }, []);
 
    return (
       <AuthLayout>

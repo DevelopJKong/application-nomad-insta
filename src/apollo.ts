@@ -12,10 +12,10 @@ export const logUserIn = async (token: string) => {
    isLoggedInVar(true);
    tokenVar(token);
 };
-// ! react-native 에서 테스트를 할때 ngrok 을 사용하면 된다.
-// https://bee9-116-93-227-7.ngrok-free.app/graphql
 const client = new ApolloClient({
    uri: 'http://172.30.1.12:5000/graphql',
    cache: new InMemoryCache(),
 });
 export default client;
+// ! react-native 에서 테스트를 할때 ngrok 을 사용하면 된다.
+// https://bee9-116-93-227-7.ngrok-free.app/graphql
