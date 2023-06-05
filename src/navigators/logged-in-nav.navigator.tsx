@@ -4,7 +4,8 @@ import Feed from '../pages/login/feed.page';
 import Search from '../pages/login/search.page';
 import Notifications from '../pages/login/notifications.page';
 import Profile from '../pages/login/profile.page';
-import { Ionicons } from '@expo/vector-icons';
+import { View } from 'react-native';
+import TabIcon from '../components/nav/tab-icon.component';
 
 const Tabs = createBottomTabNavigator();
 
@@ -23,7 +24,7 @@ const LoggedInNav = () => {
             component={Feed}
             options={{
                tabBarIcon: ({ focused, color, size: _size }) => (
-                  <Ionicons name='home' color={color} size={focused ? 22 : 20} />
+                  <TabIcon iconName={'home'} color={color} focused={focused} />
                ),
             }}
          />
@@ -32,7 +33,16 @@ const LoggedInNav = () => {
             component={Search}
             options={{
                tabBarIcon: ({ focused, color, size: _size }) => (
-                  <Ionicons name='search' color={color} size={focused ? 22 : 20} />
+                  <TabIcon iconName={'search'} color={color} focused={focused} />
+               ),
+            }}
+         />
+         <Tabs.Screen
+            name={'Camera'}
+            component={View}
+            options={{
+               tabBarIcon: ({ focused, color, size: _size }) => (
+                  <TabIcon iconName={'camera'} color={color} focused={focused} />
                ),
             }}
          />
@@ -41,7 +51,7 @@ const LoggedInNav = () => {
             component={Notifications}
             options={{
                tabBarIcon: ({ focused, color, size: _size }) => (
-                  <Ionicons name='heart-outline' color={color} size={focused ? 22 : 20} />
+                  <TabIcon iconName={'heart'} color={color} focused={focused} />
                ),
             }}
          />
@@ -50,7 +60,7 @@ const LoggedInNav = () => {
             component={Profile}
             options={{
                tabBarIcon: ({ focused, color, size: _size }) => (
-                  <Ionicons name='person-outline' color={color} size={focused ? 22 : 20} />
+                  <TabIcon iconName={'person'} color={color} focused={focused} />
                ),
             }}
          />

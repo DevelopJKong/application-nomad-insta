@@ -13,7 +13,7 @@ export const logUserIn = async (token: string) => {
    tokenVar(token);
 };
 const client = new ApolloClient({
-   uri: 'http://172.30.1.12:5000/graphql',
+   uri: 'http://172.30.1.32:5000/graphql',
    cache: new InMemoryCache(),
 });
 export default client;
