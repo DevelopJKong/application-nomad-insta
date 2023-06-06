@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import { gql, useQuery } from '@apollo/client';
+import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from '../../fragments';
 import useLogout from '../../hooks/use-logout.hook';
-import { useNavigation } from '@react-navigation/native';
-import { NavRootStackParamList } from '../../../App';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { TouchableOpacity } from 'react-native';
 
 const Container = styled.View`
    background-color: black;
@@ -16,40 +16,50 @@ const SText = styled.Text`
    color: white;
 `;
 
-const Button = styled.TouchableOpacity`
-   width: 100px;
-   height: 50px;
-   background-color: white;
-   color: black;
-   border-radius: 10px;
-   justify-content: center;
-   align-items: center;
-`;
+const FEED_QUERY = gql`
+   query seeFeed {
+      seeFeed {
+         error
+         ok
+         message
+         photos {
+            ...PhotoFragment
+            user {
+               username
+               avatar
+            }
+            caption
+            comments {
+               ...CommentFragment
+            }
+            createdAt
+            isMine
+         }
+      }
+   }
 
-const ButtonText = styled.Text`
-   color: black;
+   ${PHOTO_FRAGMENT}
+   ${COMMENT_FRAGMENT}
 `;
-
-type NavigationType = NativeStackNavigationProp<NavRootStackParamList, 'LoggedInStacks', 'Profile'>;
 
 const Feed = () => {
+   const { data } = useQuery(FEED_QUERY);
+   console.log(data);
    const { logout } = useLogout();
-   const navigation = useNavigation<NavigationType>();
    return (
       <Container>
          <SText>HELLO</SText>
-         <Button onPress={logout}>
-            <ButtonText>Logout</ButtonText>
-         </Button>
-         <Button
-            onPress={() =>
-               navigation.navigate('LoggedInStacks', {
-                  screen: 'Profile',
-               })
-            }
+         <TouchableOpacity
+            onPress={logout}
+            style={{
+               backgroundColor: 'white',
+               padding: 10,
+               borderRadius: 5,
+               marginTop: 20,
+            }}
          >
-            <ButtonText>navigate</ButtonText>
-         </Button>
+            <SText>LOGOUT</SText>
+         </TouchableOpacity>
       </Container>
    );
 };

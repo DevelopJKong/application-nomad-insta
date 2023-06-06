@@ -1,5 +1,6 @@
-import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
+import { ApolloClient, createHttpLink, InMemoryCache, makeVar } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setContext } from '@apollo/client/link/context';
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar('');
@@ -10,10 +11,24 @@ export const logUserIn = async (token: string, success: 'yes' | 'no') => {
       ['loggedIn', JSON.stringify(success)],
    ]);
    isLoggedInVar(success === 'yes');
-   tokenVar(token);
+   tokenVar(success === 'yes' ? token : '');
 };
-const client = new ApolloClient({
+
+const httpLink = createHttpLink({
    uri: 'http://172.30.1.15:5000/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+   return {
+      headers: {
+         ...headers,
+         'x-jwt': tokenVar() || '',
+      },
+   };
+});
+
+const client = new ApolloClient({
+   link: authLink.concat(httpLink),
    cache: new InMemoryCache(),
 });
 export default client;

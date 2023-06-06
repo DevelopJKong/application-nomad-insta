@@ -1,11 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Feed from '../pages/login/feed.page';
 import Search from '../pages/login/search.page';
-import Notifications from '../pages/login/notifications.page';
 import { View } from 'react-native';
 import TabIcon from '../components/nav/tab-icon.component';
-import Me from '../pages/login/me.page';
+import LoggedInStackNav from './logged-in-stack-nav.navigator';
 
 const Tabs = createBottomTabNavigator();
 
@@ -20,14 +18,15 @@ const LoggedInTabNav = () => {
          }}
       >
          <Tabs.Screen
-            name={'Feed'}
-            component={Feed}
+            name={'TabsFeed'}
             options={{
                tabBarIcon: ({ focused, color, size: _size }) => (
                   <TabIcon iconName={'home'} color={color} focused={focused} />
                ),
             }}
-         />
+         >
+            {() => LoggedInStackNav({ screenName: 'Feed' })}
+         </Tabs.Screen>
          <Tabs.Screen
             name={'Search'}
             component={Search}
@@ -47,24 +46,26 @@ const LoggedInTabNav = () => {
             }}
          />
          <Tabs.Screen
-            name={'Notifications'}
-            component={Notifications}
+            name={'TabsNotifications'}
             options={{
                tabBarIcon: ({ focused, color, size: _size }) => (
                   <TabIcon iconName={'heart'} color={color} focused={focused} />
                ),
             }}
-         />
+         >
+            {() => LoggedInStackNav({ screenName: 'Notifications' })}
+         </Tabs.Screen>
 
          <Tabs.Screen
-            name={'Me'}
-            component={Me}
+            name={'TabsMe'}
             options={{
                tabBarIcon: ({ focused, color, size: _size }) => (
                   <TabIcon iconName={'person'} color={color} focused={focused} />
                ),
             }}
-         />
+         >
+            {() => LoggedInStackNav({ screenName: 'Me' })}
+         </Tabs.Screen>
       </Tabs.Navigator>
    );
 };
