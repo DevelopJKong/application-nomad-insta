@@ -4,16 +4,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar('');
 
-export const logUserIn = async (token: string) => {
+export const logUserIn = async (token: string, success: 'yes' | 'no') => {
    await AsyncStorage.multiSet([
       ['token', JSON.stringify(token)],
-      ['loggedIn', JSON.stringify('yes')],
+      ['loggedIn', JSON.stringify(success)],
    ]);
-   isLoggedInVar(true);
+   isLoggedInVar(success === 'yes');
    tokenVar(token);
 };
 const client = new ApolloClient({
-   uri: 'http://172.30.1.32:5000/graphql',
+   uri: 'http://172.30.1.15:5000/graphql',
    cache: new InMemoryCache(),
 });
 export default client;

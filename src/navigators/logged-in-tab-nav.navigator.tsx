@@ -3,13 +3,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Feed from '../pages/login/feed.page';
 import Search from '../pages/login/search.page';
 import Notifications from '../pages/login/notifications.page';
-import Profile from '../pages/login/profile.page';
 import { View } from 'react-native';
 import TabIcon from '../components/nav/tab-icon.component';
+import Me from '../pages/login/me.page';
 
 const Tabs = createBottomTabNavigator();
 
-const LoggedInNav = () => {
+const LoggedInTabNav = () => {
    return (
       <Tabs.Navigator
          screenOptions={{
@@ -55,9 +55,10 @@ const LoggedInNav = () => {
                ),
             }}
          />
+
          <Tabs.Screen
-            name={'Profile'}
-            component={Profile}
+            name={'Me'}
+            component={Me}
             options={{
                tabBarIcon: ({ focused, color, size: _size }) => (
                   <TabIcon iconName={'person'} color={color} focused={focused} />
@@ -68,4 +69,4 @@ const LoggedInNav = () => {
    );
 };
 
-export default LoggedInNav;
+export default LoggedInTabNav;

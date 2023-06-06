@@ -1,1 +1,1 @@
-const LOGIN_KEY = 'loginAtom';
+export const LOGIN_KEY = 'loginAtom';

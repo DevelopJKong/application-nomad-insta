@@ -10,6 +10,7 @@ import { loginMutation, loginMutationVariables } from '../../__generated__/login
 import { LOGIN_MUTATION } from './login.page';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LOGIN_KEY } from '../../common/constants/global.constant';
 
 const LoginLink = styled.Text`
    color: ${colors.blue};
@@ -34,7 +35,7 @@ const Welcome = ({ navigation }: any) => {
          login: { ok, token },
       } = data;
       if (ok && token) {
-         await logUserIn(token);
+         await logUserIn(token, 'yes');
       }
    };
 
@@ -48,8 +49,8 @@ const Welcome = ({ navigation }: any) => {
          try {
             const id = await SecureStore.getItemAsync('id');
             const pw = await SecureStore.getItemAsync('pw');
-            console.log(id);
-            console.log(pw);
+            console.log('id', id);
+            console.log('pw', pw);
             if (loading) return;
             if (id && pw) {
                await loginMutation({

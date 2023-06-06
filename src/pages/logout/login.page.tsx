@@ -57,7 +57,7 @@ const Login = ({ route: { params } }: any) => {
          login: { ok, token },
       } = data;
       if (ok && token) {
-         await logUserIn(token);
+         await logUserIn(token, 'yes');
       }
    };
 
