@@ -1,6 +1,7 @@
 import React from 'react';
 
 import styled from 'styled-components/native';
+import PageLayoutComponent from '../../components/layout/page-layout.component';
 
 const Container = styled.View`
    background-color: black;
@@ -15,9 +16,11 @@ const SText = styled.Text`
 
 const Profile = () => {
    return (
-      <Container>
-         <SText>Profile</SText>
-      </Container>
+      <PageLayoutComponent>
+         <Container>
+            <SText>Profile</SText>
+         </Container>
+      </PageLayoutComponent>
    );
 };
 

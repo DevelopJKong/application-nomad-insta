@@ -1,20 +1,10 @@
 import React from 'react';
-import styled from 'styled-components/native';
 import { gql, useQuery } from '@apollo/client';
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from '../../fragments';
 import useLogout from '../../hooks/use-logout.hook';
-import { TouchableOpacity } from 'react-native';
-
-const Container = styled.View`
-   background-color: black;
-   flex: 1;
-   align-items: center;
-   justify-content: center;
-`;
-
-const SText = styled.Text`
-   color: white;
-`;
+import { FlatList, Text, View } from 'react-native';
+import PageLayoutComponent from '../../components/layout/page-layout.component';
+import ScreenLayoutComponent from '../../components/layout/screen-layout.componen';
 
 const FEED_QUERY = gql`
    query seeFeed {
@@ -43,24 +33,24 @@ const FEED_QUERY = gql`
 `;
 
 const Feed = () => {
-   const { data } = useQuery(FEED_QUERY);
-   console.log(data);
+   const { data, loading } = useQuery(FEED_QUERY);
+   console.log(data?.seeFeed?.photos);
    const { logout } = useLogout();
+
+   const renderPhoto = ({ item: photo }: any) => {
+      return (
+         <View style={{ flex: 1 }}>
+            <Text style={{ color: 'white' }}>{photo.caption}</Text>
+         </View>
+      );
+   };
+
    return (
-      <Container>
-         <SText>HELLO</SText>
-         <TouchableOpacity
-            onPress={logout}
-            style={{
-               backgroundColor: 'white',
-               padding: 10,
-               borderRadius: 5,
-               marginTop: 20,
-            }}
-         >
-            <SText>LOGOUT</SText>
-         </TouchableOpacity>
-      </Container>
+      <PageLayoutComponent>
+         <ScreenLayoutComponent loading={loading}>
+            <FlatList data={data?.seeFeed?.photos} keyExtractor={(photo) => photo.id} renderItem={renderPhoto} />
+         </ScreenLayoutComponent>
+      </PageLayoutComponent>
    );
 };
 

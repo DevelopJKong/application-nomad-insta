@@ -5,6 +5,7 @@ import LoggedOutNav from './src/navigators/logged-out-nav.navigator';
 import LoggedInTabNav from './src/navigators/logged-in-tab-nav.navigator';
 import LoggedInStackNav from './src/navigators/logged-in-stack-nav.navigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StatusBar } from 'react-native';
 
 export type NavRootStackParamList = {
    LoggedInTabs?: {
@@ -34,6 +35,7 @@ export default function App() {
    return (
       <ApolloProvider client={client}>
          <NavigationContainer>
+            <StatusBar barStyle='light-content' />
             <Nav.Navigator
                screenOptions={{
                   headerShown: false,

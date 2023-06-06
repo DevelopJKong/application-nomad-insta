@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components/native';
+import PageLayoutComponent from '../../components/layout/page-layout.component';
 
 const Container = styled.View`
    background-color: black;
@@ -14,9 +15,11 @@ const SText = styled.Text`
 
 const Search = () => {
    return (
-      <Container>
-         <SText>Search</SText>
-      </Container>
+      <PageLayoutComponent>
+         <Container>
+            <SText>Search</SText>
+         </Container>
+      </PageLayoutComponent>
    );
 };
 
