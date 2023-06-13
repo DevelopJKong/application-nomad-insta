@@ -48,7 +48,7 @@ const Feed = () => {
                style={{ width: '100%' }}
                showsVerticalScrollIndicator={false}
                data={data?.seeFeed?.photos}
-               keyExtractor={(photo) => photo.id}
+               keyExtractor={(photo) => String(photo.id)}
                renderItem={renderPhoto}
             />
          </ScreenLayoutComponent>

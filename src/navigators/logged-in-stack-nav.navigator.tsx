@@ -6,6 +6,8 @@ import Search from '../pages/login/search.page';
 import Notifications from '../pages/login/notifications.page';
 import Me from '../pages/login/me.page';
 import { NavRootStackParamList } from '../../App';
+import Likes from '../pages/login/likes.page';
+import Comments from '../pages/login/comments.page';
 
 interface ILoggedInStackNav {
    screenName?: string;
@@ -29,6 +31,8 @@ const LoggedInStackNav = ({ screenName }: ILoggedInStackNav) => {
          {screenName === 'Me' ? <Stack.Screen name={'Me'} component={Me} /> : null}
          <Stack.Screen name={'Profile'} component={Profile} />
          <Stack.Screen name={'Photo'} component={Photo} />
+         <Stack.Screen name={'Likes'} component={Likes} />
+         <Stack.Screen name={'Comments'} component={Comments} />
       </Stack.Navigator>
    );
 };
