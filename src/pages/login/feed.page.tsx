@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from '../../fragments';
 import useLogout from '../../hooks/use-logout.hook';
@@ -34,17 +34,27 @@ const FEED_QUERY = gql`
 `;
 
 const Feed = () => {
-   const { data, loading } = useQuery(FEED_QUERY);
+   const { data, loading, refetch } = useQuery(FEED_QUERY);
    const { logout } = useLogout();
+
+   const [refreshing, setRefreshing] = useState<boolean>(false);
 
    const renderPhoto = ({ item: photo }: any) => {
       return <PhotoComponent {...photo} />;
+   };
+
+   const refresh = async () => {
+      setRefreshing(true);
+      await refetch();
+      setRefreshing(false);
    };
 
    return (
       <PageLayoutComponent>
          <ScreenLayoutComponent loading={loading}>
             <FlatList
+               refreshing={refreshing}
+               onRefresh={refresh}
                style={{ width: '100%' }}
                showsVerticalScrollIndicator={false}
                data={data?.seeFeed?.photos}
