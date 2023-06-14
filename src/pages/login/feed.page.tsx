@@ -34,7 +34,12 @@ const FEED_QUERY = gql`
 `;
 
 const Feed = () => {
-   const { data, loading, refetch } = useQuery(FEED_QUERY);
+   const [offset, setOffset] = useState<number>(0);
+   const { data, loading, refetch, fetchMore } = useQuery(FEED_QUERY, {
+      variables: {
+         offset,
+      },
+   });
    const { logout } = useLogout();
 
    const [refreshing, setRefreshing] = useState<boolean>(false);
@@ -53,6 +58,14 @@ const Feed = () => {
       <PageLayoutComponent>
          <ScreenLayoutComponent loading={loading}>
             <FlatList
+               onEndReachedThreshold={0.1}
+               onEndReached={() =>
+                  fetchMore({
+                     variables: {
+                        offset: data?.seeFeed?.photos?.length,
+                     },
+                  })
+               }
                refreshing={refreshing}
                onRefresh={refresh}
                style={{ width: '100%' }}
