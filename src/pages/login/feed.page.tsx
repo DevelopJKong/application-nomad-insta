@@ -8,8 +8,8 @@ import ScreenLayoutComponent from '../../components/layout/screen-layout.compone
 import PhotoComponent from '../../components/photo/photo.component';
 
 const FEED_QUERY = gql`
-   query seeFeed {
-      seeFeed {
+   query seeFeed($seeFeedInput: SeeFeedInput!) {
+      seeFeed(input: $seeFeedInput) {
          error
          ok
          message
@@ -58,7 +58,7 @@ const Feed = () => {
       <PageLayoutComponent>
          <ScreenLayoutComponent loading={loading}>
             <FlatList
-               onEndReachedThreshold={0.1}
+               onEndReachedThreshold={0.5}
                onEndReached={() =>
                   fetchMore({
                      variables: {
