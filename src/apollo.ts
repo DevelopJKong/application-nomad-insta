@@ -16,7 +16,7 @@ export const logUserIn = async (token: string, success: 'yes' | 'no') => {
 };
 
 const httpLink = createHttpLink({
-   uri: 'http://172.30.1.7:5000/graphql',
+   uri: 'http://172.30.1.66:5000/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -27,22 +27,23 @@ const authLink = setContext((_, { headers }) => {
       },
    };
 });
+export const cache = new InMemoryCache({
+   typePolicies: {
+      Query: {
+         fields: {
+            seeFeed: offsetLimitPagination(),
+            // keyArgs: false,
+            // merge(existing = [], incoming = []) {
+            //    return [...existing, ...incoming];
+            // },
+         },
+      },
+   },
+});
 
 const client = new ApolloClient({
    link: authLink.concat(httpLink),
-   cache: new InMemoryCache({
-      typePolicies: {
-         Query: {
-            fields: {
-               seeFeed: offsetLimitPagination(),
-               // keyArgs: false,
-               // merge(existing = [], incoming = []) {
-               //    return [...existing, ...incoming];
-               // },
-            },
-         },
-      },
-   }),
+   cache,
 });
 export default client;
 // ! react-native 에서 테스트를 할때 ngrok 을 사용하면 된다.

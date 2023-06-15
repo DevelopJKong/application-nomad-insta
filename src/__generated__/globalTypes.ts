@@ -23,6 +23,10 @@ export interface SeeFeedInput {
   page: number;
 }
 
+export interface ToggleLikeInput {
+  id: number;
+}
+
 //==============================================================
 // END Enums and Input Objects
 //==============================================================

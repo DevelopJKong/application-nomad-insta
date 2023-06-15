@@ -4,6 +4,8 @@ import { useWindowDimensions, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
+import { ApolloCache, FetchResult, gql, useMutation } from '@apollo/client';
+import { toggleLike } from '../../__generated__/toggleLike';
 
 interface IPhotoComponent {
    id: number;
@@ -17,6 +19,16 @@ interface IPhotoComponent {
    likes: number;
    commentNumber: number;
 }
+
+const TOGGLE_LIKE_MUTATION = gql`
+   mutation toggleLike($input: ToggleLikeInput!) {
+      toggleLike(input: $input) {
+         ok
+         error
+         message
+      }
+   }
+`;
 
 const Container = styled.View``;
 const Header = styled.TouchableOpacity`
@@ -62,7 +74,15 @@ const ExtraContainer = styled.View`
 
 export type NavigationType = NativeStackNavigationProp<any>;
 
-const PhotoComponent = ({ id, user, caption, file, isLiked, likes, commentNumber }: IPhotoComponent) => {
+const PhotoComponent = ({
+   id,
+   user,
+   caption: _caption,
+   file,
+   isLiked,
+   likes,
+   commentNumber: _commentNumber,
+}: IPhotoComponent) => {
    const { width, height } = useWindowDimensions();
    const [imageHeight, setImageHeight] = useState<number>(height - 450);
    const navigation = useNavigation<NavigationType>();
@@ -73,6 +93,38 @@ const PhotoComponent = ({ id, user, caption, file, isLiked, likes, commentNumber
          setImageHeight(height / 3);
       });
    }, [file]);
+
+   const updateToggleLike = (cache: ApolloCache<any>, result: Omit<FetchResult<toggleLike>, 'context'>) => {
+      if (!result.data) return;
+      const {
+         data: {
+            toggleLike: { ok },
+         },
+      } = result;
+      if (ok) {
+         const photoId = `Photo:${id}`;
+         cache.modify({
+            id: photoId,
+            fields: {
+               isLiked(prev) {
+                  return !prev;
+               },
+               likes(prev) {
+                  if (isLiked) {
+                     return prev - 1;
+                  }
+                  return prev + 1;
+               },
+            },
+         });
+      }
+   };
+   const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_MUTATION, {
+      variables: {
+         id,
+      },
+      update: updateToggleLike,
+   });
    return (
       <Container>
          <Header onPress={() => navigation.navigate('Profile')}>
@@ -97,7 +149,7 @@ const PhotoComponent = ({ id, user, caption, file, isLiked, likes, commentNumber
          />
          <ExtraContainer>
             <Actions>
-               <Action>
+               <Action onPress={() => toggleLikeMutation()}>
                   <Ionicons name={isLiked ? 'heart' : 'heart-outline'} color={isLiked ? 'tomato' : 'white'} size={22} />
                </Action>
                <Action onPress={() => navigation.navigate('Comments')}>
