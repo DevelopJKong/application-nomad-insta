@@ -21,5 +21,5 @@ export interface toggleLike {
 }
 
 export interface toggleLikeVariables {
-  input: ToggleLikeInput;
+  toggleLikeInput: ToggleLikeInput;
 }

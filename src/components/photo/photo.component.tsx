@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { ApolloCache, FetchResult, gql, useMutation } from '@apollo/client';
-import { toggleLike } from '../../__generated__/toggleLike';
 import { BACKEND_URL } from '../../common/constants/global.constant';
+import { toggleLike, toggleLikeVariables } from '../../__generated__/toggleLike';
 
 interface IPhotoComponent {
    id: number;
@@ -22,8 +22,8 @@ interface IPhotoComponent {
 }
 
 const TOGGLE_LIKE_MUTATION = gql`
-   mutation toggleLike($input: ToggleLikeInput!) {
-      toggleLike(input: $input) {
+   mutation toggleLike($toggleLikeInput: ToggleLikeInput!) {
+      toggleLike(input: $toggleLikeInput) {
          ok
          error
          message
@@ -73,7 +73,15 @@ const ExtraContainer = styled.View`
    padding: 10px;
 `;
 
-export type NavigationType = NativeStackNavigationProp<any>;
+type NavRootStackParamList = {
+   Profile?: {};
+   Comments?: {};
+   Likes?: {};
+};
+
+type NavRootStackRouteName = 'Profile' | 'Comments' | 'Likes';
+
+type NavigationType = NativeStackNavigationProp<NavRootStackParamList, NavRootStackRouteName>;
 
 const PhotoComponent = ({
    id,
@@ -122,9 +130,11 @@ const PhotoComponent = ({
          });
       }
    };
-   const [toggleLikeMutation] = useMutation(TOGGLE_LIKE_MUTATION, {
+   const [toggleLikeMutation] = useMutation<toggleLike, toggleLikeVariables>(TOGGLE_LIKE_MUTATION, {
       variables: {
-         id,
+         toggleLikeInput: {
+            id,
+         },
       },
       update: updateToggleLike,
    });

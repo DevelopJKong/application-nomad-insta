@@ -112,14 +112,14 @@ const CreateAccount = ({ navigation }: any) => {
                placeholder='First Name'
                returnKeyType='next'
                onSubmitEditing={() => onNext(lastNameRef)}
-               onChangeText={(text) => setValue('firstName', text)}
+               onChangeText={(text: string) => setValue('firstName', text)}
             />
             <Input
                ref={lastNameRef}
                placeholder='Last Name'
                returnKeyType='next'
                onSubmitEditing={() => onNext(emailRef)}
-               onChangeText={(text) => setValue('lastName', text)}
+               onChangeText={(text: string) => setValue('lastName', text)}
             />
 
             <Input
@@ -128,14 +128,14 @@ const CreateAccount = ({ navigation }: any) => {
                keyboardType='email-address'
                returnKeyType='next'
                onSubmitEditing={() => onNext(passwordRef)}
-               onChangeText={(text) => setValue('email', text)}
+               onChangeText={(text: string) => setValue('email', text)}
             />
             <Input
                ref={passwordRef}
                placeholder='Password'
                secureTextEntry
                returnKeyType='done'
-               onChangeText={(text) => setValue('password', text)}
+               onChangeText={(text: string) => setValue('password', text)}
                onSubmitEditing={handleSubmit(onValid)}
                $lastOne={true}
             />
