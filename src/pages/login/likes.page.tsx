@@ -1,24 +1,52 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import PageLayoutComponent from '../../components/layout/page-layout.component';
-import styled from 'styled-components/native';
+import { USER_FRAGMENT } from '../../fragments';
+import { gql, useQuery } from '@apollo/client';
+import UserRowComponent from '../../components/user/user-row.component';
+import ScreenLayoutComponent from '../../components/layout/screen-layout.component';
+import { FlatList } from 'react-native';
 
-const Container = styled.View`
-   background-color: black;
-   flex: 1;
-   align-items: center;
-   justify-content: center;
+const LIKES_QUERY = gql`
+   query seeLikes($seeLikesInput: SeeLikesInput!) {
+      seeLikes(input: $seeLikesInput) {
+         user {
+            ...UserFragment
+         }
+      }
+   }
+   ${USER_FRAGMENT}
 `;
 
-const SText = styled.Text`
-   color: white;
-`;
-const Likes = () => {
+const Likes = ({ route }: any) => {
+   const [refreshing, setRefreshing] = useState(false);
+   const { data, loading, refetch } = useQuery(LIKES_QUERY, {
+      variables: {
+         seeLikesInput: {
+            id: route?.params?.photoId,
+         },
+         skip: !route?.params?.photoId,
+      },
+   });
+
+   const renderUser = ({ item: user }: any) => <UserRowComponent {...user} />;
+
+   const onRefresh = async () => {
+      setRefreshing(true);
+      await refetch();
+      setRefreshing(false);
+   };
    return (
       <PageLayoutComponent>
-         <Container>
-            <SText>Likes</SText>
-         </Container>
+         <ScreenLayoutComponent loading={loading}>
+            <FlatList
+               refreshing={refreshing}
+               onRefresh={onRefresh}
+               data={data?.seeLikes?.user}
+               keyExtractor={(item: any) => '' + item.id}
+               renderItem={renderUser}
+               style={{ width: '100%' }}
+            />
+         </ScreenLayoutComponent>
       </PageLayoutComponent>
    );
 };

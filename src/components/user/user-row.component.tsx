@@ -26,7 +26,6 @@ const Column = styled.TouchableOpacity`
 
 const Avatar = styled.Image`
    width: 40px;
-   color: white;
 `;
 
 const Username = styled.Text`
