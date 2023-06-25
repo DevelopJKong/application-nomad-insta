@@ -4,7 +4,7 @@ import { USER_FRAGMENT } from '../../fragments';
 import { gql, useQuery } from '@apollo/client';
 import UserRowComponent from '../../components/user/user-row.component';
 import ScreenLayoutComponent from '../../components/layout/screen-layout.component';
-import { FlatList } from 'react-native';
+import { FlatList, View } from 'react-native';
 
 const LIKES_QUERY = gql`
    query seeLikes($seeLikesInput: SeeLikesInput!) {
@@ -35,10 +35,20 @@ const Likes = ({ route }: any) => {
       await refetch();
       setRefreshing(false);
    };
+
    return (
       <PageLayoutComponent>
          <ScreenLayoutComponent loading={loading}>
             <FlatList
+               ItemSeparatorComponent={() => (
+                  <View
+                     style={{
+                        width: '100%',
+                        height: 1,
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                     }}
+                  />
+               )}
                refreshing={refreshing}
                onRefresh={onRefresh}
                data={data?.seeLikes?.user}

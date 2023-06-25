@@ -52,7 +52,6 @@ const Login = ({ route: { params } }: any) => {
    const passwordRef: React.MutableRefObject<any> = useRef(null);
 
    const onCompleted = async (data: loginMutation) => {
-      console.log(data);
       const {
          login: { ok, token },
       } = data;

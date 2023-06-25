@@ -52,8 +52,6 @@ const Feed = () => {
       setRefreshing(false);
    };
 
-   console.log('data', data);
-
    return (
       <PageLayoutComponent>
          <ScreenLayoutComponent loading={loading}>

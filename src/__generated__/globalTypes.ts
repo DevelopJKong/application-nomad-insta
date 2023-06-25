@@ -23,6 +23,10 @@ export interface SeeFeedInput {
   page: number;
 }
 
+export interface SeeLikesInput {
+  id: number;
+}
+
 export interface ToggleLikeInput {
   id: number;
 }

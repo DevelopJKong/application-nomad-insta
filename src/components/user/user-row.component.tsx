@@ -65,12 +65,12 @@ const UserRowComponent = ({ avatar, id, username, isFollowing, isMe }: IUserRowC
          >
             <Avatar source={{ uri: avatar }} />
             <Username>{username}</Username>
-            {!isMe && (
-               <FollowBtn>
-                  <FollowBtnText>{isFollowing ? 'UnFollow' : 'Follow'}</FollowBtnText>
-               </FollowBtn>
-            )}
          </Column>
+         {!isMe && (
+            <FollowBtn>
+               <FollowBtnText>{isFollowing ? 'UnFollow' : 'Follow'}</FollowBtnText>
+            </FollowBtn>
+         )}
       </Wrapper>
    );
 };

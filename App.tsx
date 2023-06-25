@@ -6,7 +6,7 @@ import LoggedInTabNav from './src/navigators/logged-in-tab-nav.navigator';
 import LoggedInStackNav from './src/navigators/logged-in-stack-nav.navigator';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'react-native';
-import { AsyncStorageWrapper, persistCache } from 'apollo3-cache-persist';
+import { AsyncStorageWrapper, CachePersistor } from 'apollo3-cache-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -49,10 +49,12 @@ export default function App() {
          try {
             // Preload fonts, make any API calls you need to do here
             await Font.loadAsync(Entypo.font);
-            await persistCache({
+            const persistor = new CachePersistor({
                cache,
                storage: new AsyncStorageWrapper(AsyncStorage),
             });
+
+            await persistor.purge();
             // Artificially delay for two seconds to simulate a slow loading
             // experience. Please remove this if you copy and paste the code!
             await new Promise((resolve) => setTimeout(resolve, 2000));
