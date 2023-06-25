@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from '../../fragments';
-import useLogout from '../../hooks/use-logout.hook';
-import { FlatList, Text, View } from 'react-native';
+import { FlatList } from 'react-native';
 import PageLayoutComponent from '../../components/layout/page-layout.component';
-import ScreenLayoutComponent from '../../components/layout/screen-layout.componen';
+import ScreenLayoutComponent from '../../components/layout/screen-layout.component';
 import PhotoComponent from '../../components/photo/photo.component';
 
 const FEED_QUERY = gql`
    query seeFeed($seeFeedInput: SeeFeedInput!) {
       seeFeed(input: $seeFeedInput) {
-         error
          ok
          message
+         error
          photos {
             ...PhotoFragment
             user {
@@ -20,29 +19,28 @@ const FEED_QUERY = gql`
                avatar
             }
             caption
+            createdAt
+            isMine
             comments {
                ...CommentFragment
             }
-            createdAt
-            isMine
          }
       }
    }
-
    ${PHOTO_FRAGMENT}
    ${COMMENT_FRAGMENT}
 `;
 
 const Feed = () => {
-   const [offset, setOffset] = useState<number>(0);
+   const [refreshing, setRefreshing] = useState<boolean>(false);
+
    const { data, loading, refetch, fetchMore } = useQuery(FEED_QUERY, {
       variables: {
-         offset,
+         seeFeedInput: {
+            page: 1,
+         },
       },
    });
-   const { logout } = useLogout();
-
-   const [refreshing, setRefreshing] = useState<boolean>(false);
 
    const renderPhoto = ({ item: photo }: any) => {
       return <PhotoComponent {...photo} />;
@@ -54,6 +52,8 @@ const Feed = () => {
       setRefreshing(false);
    };
 
+   console.log('data', data);
+
    return (
       <PageLayoutComponent>
          <ScreenLayoutComponent loading={loading}>
@@ -62,7 +62,9 @@ const Feed = () => {
                onEndReached={() =>
                   fetchMore({
                      variables: {
-                        offset: data?.seeFeed?.photos?.length,
+                        seeFeedInput: {
+                           page: data?.seeFeed?.photos?.length,
+                        },
                      },
                   })
                }

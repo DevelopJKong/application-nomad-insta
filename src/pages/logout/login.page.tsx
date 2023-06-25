@@ -112,7 +112,7 @@ const Login = ({ route: { params } }: any) => {
             returnKeyType='next'
             autoCapitalize={'none'}
             onSubmitEditing={() => onNext(passwordRef)}
-            onChangeText={(text) => {
+            onChangeText={(text: string) => {
                setValue('email', text);
                clearErrors('email');
             }}
@@ -128,7 +128,7 @@ const Login = ({ route: { params } }: any) => {
             placeholder='Password'
             returnKeyType='done'
             secureTextEntry
-            onChangeText={(text) => {
+            onChangeText={(text: string) => {
                setValue('password', text);
                clearErrors('password');
             }}

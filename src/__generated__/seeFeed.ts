@@ -39,16 +39,16 @@ export interface seeFeed_seeFeed_photos {
   isLiked: boolean | null;
   user: seeFeed_seeFeed_photos_user | null;
   caption: string | null;
-  comments: seeFeed_seeFeed_photos_comments[] | null;
   createdAt: any | null;
   isMine: boolean | null;
+  comments: seeFeed_seeFeed_photos_comments[] | null;
 }
 
 export interface seeFeed_seeFeed {
   __typename: "SeeFeedOutput";
-  error: string | null;
   ok: boolean;
   message: string | null;
+  error: string | null;
   photos: seeFeed_seeFeed_photos[] | null;
 }
 

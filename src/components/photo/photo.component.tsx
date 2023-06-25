@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { ApolloCache, FetchResult, gql, useMutation } from '@apollo/client';
 import { toggleLike } from '../../__generated__/toggleLike';
+import { BACKEND_URL } from '../../common/constants/global.constant';
 
 interface IPhotoComponent {
    id: number;
@@ -85,12 +86,14 @@ const PhotoComponent = ({
 }: IPhotoComponent) => {
    const { width, height } = useWindowDimensions();
    const [imageHeight, setImageHeight] = useState<number>(height - 450);
+   const [fileName, setFileName] = useState<string>('');
    const navigation = useNavigation<NavigationType>();
 
    useEffect(() => {
-      Image.getSize(file, (width, height) => {
+      Image.getSize(file.replace('http://localhost:5000', `${BACKEND_URL}:5000`), (width, height) => {
          console.log(imageHeight);
          setImageHeight(height / 3);
+         setFileName(file.replace('http://localhost:5000', `${BACKEND_URL}:5000`));
       });
    }, [file]);
 
@@ -140,12 +143,11 @@ const PhotoComponent = ({
             <Username>{user.username}</Username>
          </Header>
          <File
-            resizeMode={'contain'}
             style={{
                width,
                height: height - 200,
             }}
-            source={{ uri: file }}
+            source={{ uri: fileName ? fileName : 'http://localhost:5000' }}
          />
          <ExtraContainer>
             <Actions>
