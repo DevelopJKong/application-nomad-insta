@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
 import PageLayoutComponent from '../../components/layout/page-layout.component';
+import useMe from '../../hooks/use-me.hook';
 
 const Container = styled.View`
    background-color: black;
@@ -13,7 +14,13 @@ const SText = styled.Text`
    color: white;
 `;
 
-const Me = () => {
+const Me = ({ navigation }: any) => {
+   const { data } = useMe();
+   useEffect(() => {
+      navigation.setOptions({
+         title: data?.me?.username,
+      });
+   }, []);
    return (
       <PageLayoutComponent>
          <Container>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from 'styled-components/native';
 import PageLayoutComponent from '../../components/layout/page-layout.component';
@@ -14,7 +14,14 @@ const SText = styled.Text`
    color: white;
 `;
 
-const Profile = () => {
+const Profile = ({ navigation, route }: any) => {
+   useEffect(() => {
+      if (route?.params?.username) {
+         navigation.setOptions({
+            title: route.params.username,
+         });
+      }
+   }, []);
    return (
       <PageLayoutComponent>
          <Container>
