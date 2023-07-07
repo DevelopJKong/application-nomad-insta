@@ -21,8 +21,9 @@ const Me = ({ navigation }: any) => {
          title: data?.me?.username,
       });
    }, []);
+
    return (
-      <PageLayoutComponent>
+      <PageLayoutComponent title={data?.me?.user?.username}>
          <Container>
             <SText>Me</SText>
          </Container>

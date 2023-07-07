@@ -1,9 +1,11 @@
 import styled from 'styled-components/native';
 import React from 'react';
 import useLogout from '../../hooks/use-logout.hook';
+import * as _ from 'lodash';
 
 interface IPageLayoutComponent {
    children: React.ReactNode;
+   title?: string;
 }
 
 const Container = styled.SafeAreaView`
@@ -15,7 +17,7 @@ const LogoWrapper = styled.View`
    position: relative;
    width: 100%;
    height: 70px;
-   justify-content: center;
+   justify-content: space-between;
    align-items: center;
    flex-direction: row;
 `;
@@ -39,14 +41,26 @@ const Btn = styled.Button`
    right: 0;
 `;
 
-const PageLayoutComponent = ({ children }: IPageLayoutComponent) => {
+const SView = styled.View``;
+
+const SText = styled.Text`
+   color: white;
+`;
+
+const PageLayoutComponent = ({ children, title }: IPageLayoutComponent) => {
    const { logout } = useLogout();
    return (
       <Container>
          <LogoWrapper>
-            <Logo>
-               <LogoImage source={require('../../../assets/logo.png')} />
-            </Logo>
+            <SView></SView>
+            {!_.isEmpty(title) ? (
+               <SText>{title}</SText>
+            ) : (
+               <Logo>
+                  <LogoImage source={require('../../../assets/logo.png')} />
+               </Logo>
+            )}
+
             <Btn title='Logout' onPress={() => logout()} />
          </LogoWrapper>
          {children}
