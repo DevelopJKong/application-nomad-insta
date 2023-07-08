@@ -37,18 +37,13 @@ const RightArrow = styled.Pressable`
    left: 10px;
 `;
 
-const ProfileLayoutComponent = ({ children, title }: IProfileLayoutComponent) => {
+const TitleLayoutComponent = ({ children, title }: IProfileLayoutComponent) => {
    const navigation = useNavigation();
    return (
       <Container>
          <TitleWrapper>
             <Title>{title}</Title>
-            <RightArrow
-               onPress={() => {
-                  console.log('here');
-                  navigation.goBack();
-               }}
-            >
+            <RightArrow onPress={() => navigation.goBack()}>
                <Entypo name='chevron-left' size={24} color='white' />
             </RightArrow>
          </TitleWrapper>
@@ -58,4 +53,4 @@ const ProfileLayoutComponent = ({ children, title }: IProfileLayoutComponent) =>
    );
 };
 
-export default ProfileLayoutComponent;
+export default TitleLayoutComponent;
