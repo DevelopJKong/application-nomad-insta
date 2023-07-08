@@ -74,7 +74,9 @@ const ExtraContainer = styled.View`
 `;
 
 type NavRootStackParamList = {
-   Profile?: {};
+   Profile?: {
+      username: string;
+   };
    Comments?: {
       photoId: number;
    };
@@ -142,7 +144,13 @@ const PhotoComponent = ({
    });
    return (
       <Container>
-         <Header onPress={() => navigation.navigate('Profile')}>
+         <Header
+            onPress={() =>
+               navigation.navigate('Profile', {
+                  username: user.username,
+               })
+            }
+         >
             <UserAvatar
                resizeMode={'cover'}
                source={{ uri: user.avatar }}
@@ -180,7 +188,13 @@ const PhotoComponent = ({
                <Likes>{likes === 1 ? '1 like' : `${likes} likes`}</Likes>
             </TouchableOpacity>
             <Caption>
-               <UsernameBtn onPress={() => navigation.navigate('Profile')}>
+               <UsernameBtn
+                  onPress={() =>
+                     navigation.navigate('Profile', {
+                        username: user.username,
+                     })
+                  }
+               >
                   <Username>{user.username}</Username>
                </UsernameBtn>
                <CaptionText></CaptionText>

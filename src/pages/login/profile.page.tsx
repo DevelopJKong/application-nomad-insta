@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 
 import styled from 'styled-components/native';
-import PageLayoutComponent from '../../components/layout/page-layout.component';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import ProfileLayoutComponent from '../../components/layout/profile-layout.component';
 
 const Container = styled.View`
    background-color: black;
@@ -14,7 +15,17 @@ const SText = styled.Text`
    color: white;
 `;
 
-const Profile = ({ navigation, route }: any) => {
+type NavRootStackParamList = {
+   Profile: {
+      username: string;
+   };
+};
+
+type NavRootStackRouteName = 'Profile';
+
+type NavigationType = NativeStackScreenProps<NavRootStackParamList, NavRootStackRouteName>;
+
+const Profile = ({ navigation, route }: NavigationType) => {
    useEffect(() => {
       if (route?.params?.username) {
          navigation.setOptions({
@@ -22,12 +33,13 @@ const Profile = ({ navigation, route }: any) => {
          });
       }
    }, []);
+
    return (
-      <PageLayoutComponent>
+      <ProfileLayoutComponent title={route.params.username}>
          <Container>
             <SText>Profile</SText>
          </Container>
-      </PageLayoutComponent>
+      </ProfileLayoutComponent>
    );
 };
 
