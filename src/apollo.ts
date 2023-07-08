@@ -35,17 +35,19 @@ export const cache = new InMemoryCache({
             seeFeed: {
                keyArgs: false,
                merge(existing: ISeeFeed, incoming: ISeeFeed) {
-                  if (existing) {
+                  if (existing && incoming && !_.isEqual(existing, incoming)) {
+                     const photos = [
+                        ...(!_.isEmpty(existing?.photos as ISeeFeedPhotos[])
+                           ? (existing.photos as ISeeFeedPhotos[])
+                           : []),
+                        ...(!_.isEmpty(incoming?.photos as ISeeFeedPhotos[])
+                           ? (incoming.photos as ISeeFeedPhotos[])
+                           : []),
+                     ];
+
                      return {
                         ...existing,
-                        photos: [
-                           ...(!_.isEmpty(existing?.photos as ISeeFeedPhotos[])
-                              ? (existing.photos as ISeeFeedPhotos[])
-                              : []),
-                           ...(!_.isEmpty(incoming?.photos as ISeeFeedPhotos[])
-                              ? (incoming.photos as ISeeFeedPhotos[])
-                              : []),
-                        ],
+                        photos,
                      };
                   }
                   return incoming;
