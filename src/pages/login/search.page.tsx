@@ -5,9 +5,11 @@ import DismissKeyBoardComponent from '../../components/dismiss-key-board.compone
 import { useForm } from 'react-hook-form';
 import { EvilIcons } from '@expo/vector-icons';
 import { gql, useLazyQuery } from '@apollo/client';
+import { ActivityIndicator } from 'react-native';
+import * as _ from 'lodash';
 
 interface IForm {
-   keyboard: string;
+   keyword: string;
 }
 
 const SEARCH_PHOTOS = gql`
@@ -29,10 +31,6 @@ const Container = styled.View`
    flex: 1;
    align-items: center;
    justify-content: center;
-`;
-
-const SText = styled.Text`
-   color: white;
 `;
 
 const InputWrapper = styled.View`
@@ -59,13 +57,37 @@ const SearchIcon = styled(EvilIcons)`
    z-index: 10;
 `;
 
+const SearchContainer = styled.View`
+   justify-content: center;
+   align-items: center;
+`;
+
+const SearchText = styled.Text`
+   margin-top: 15px;
+   color: white;
+   font-weight: 600;
+`;
+
 const Search = () => {
-   const { setValue, register, watch } = useForm<IForm>();
-   const [startQueryFn, { loading, data }] = useLazyQuery(SEARCH_PHOTOS);
+   const { handleSubmit, setValue, register, watch } = useForm<IForm>();
+   const [startQueryFn, { loading, data, called }] = useLazyQuery(SEARCH_PHOTOS);
+
+   const onValid = ({ keyword }: IForm) => {
+      startQueryFn({
+         variables: {
+            input: {
+               keyword,
+            },
+         },
+      });
+   };
 
    useEffect(() => {
-      register('keyboard');
-   }, [register]);
+      register('keyword', {
+         required: true,
+         minLength: 3,
+      });
+   }, []);
 
    return (
       <DismissKeyBoardComponent>
@@ -73,18 +95,38 @@ const Search = () => {
             <InputWrapper>
                <SearchIcon name='search' size={24} color='white' />
                <Input
-                  value={watch('keyboard')}
-                  onChangeText={(text: string) => setValue('keyboard', text)}
+                  value={watch('keyword')}
+                  onChangeText={(text: string) => setValue('keyword', text)}
                   autoCapitalize='none'
                   returnKeyLabel='Search'
                   returnKeyType='search'
+                  onSubmitEditing={handleSubmit(onValid)}
                   placeholderTextColor='white'
                   placeholder='Search photos'
                   autoCorrect={false}
                />
             </InputWrapper>
             <Container>
-               <SText>Search</SText>
+               {loading ? (
+                  <SearchContainer>
+                     <ActivityIndicator size={'large'} color='white' />
+                     <SearchText>Searching...</SearchText>
+                  </SearchContainer>
+               ) : (
+                  <></>
+               )}
+
+               {!called ? (
+                  <SearchContainer>
+                     <SearchText>Search by keyword...</SearchText>
+                  </SearchContainer>
+               ) : null}
+
+               {!_.isEmpty(data?.searchPhotos) && _.isEmpty(data?.searchPhotos?.photos) ? (
+                  <SearchContainer>
+                     <SearchText>Couldn't find anything</SearchText>
+                  </SearchContainer>
+               ) : null}
             </Container>
          </PageLayoutComponent>
       </DismissKeyBoardComponent>
