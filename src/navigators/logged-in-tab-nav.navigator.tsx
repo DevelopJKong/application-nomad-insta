@@ -1,8 +1,8 @@
 import React from 'react';
 import * as _ from 'lodash';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TabsNav from './tabs-nav.component';
-import Upload from '../pages/login/upload.page';
+import TabsNav from './tabs-nav.navigator';
+import UploadNav from './upload-nav.navigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,7 +16,7 @@ const LoggedInTabNav = () => {
          }}
       >
          <Stack.Screen name={'Tabs'} component={TabsNav} />
-         <Stack.Screen name={'Upload'} component={Upload} />
+         <Stack.Screen name={'Upload'} component={UploadNav} />
       </Stack.Navigator>
    );
 };

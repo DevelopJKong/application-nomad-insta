@@ -7,7 +7,7 @@ import ScreenLayoutComponent from '../../components/layout/screen-layout.compone
 import PhotoComponent from '../../components/photo/photo.component';
 import * as _ from 'lodash';
 
-const FEED_QUERY = gql`
+const SEE_FEED_QUERY = gql`
    query seeFeed($seeFeedInput: SeeFeedInput!) {
       seeFeed(input: $seeFeedInput) {
          ok
@@ -36,7 +36,7 @@ const Feed = () => {
    const [pageCount, setPageCount] = useState<number>(2);
    const [refreshing, setRefreshing] = useState<boolean>(false);
 
-   const { data, loading, refetch, fetchMore } = useQuery(FEED_QUERY, {
+   const { data, loading, refetch, fetchMore } = useQuery(SEE_FEED_QUERY, {
       variables: {
          seeFeedInput: {
             page: 1,
