@@ -5,8 +5,9 @@ import DismissKeyBoardComponent from '../../components/dismiss-key-board.compone
 import { useForm } from 'react-hook-form';
 import { EvilIcons } from '@expo/vector-icons';
 import { gql, useLazyQuery } from '@apollo/client';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, FlatList, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
 import * as _ from 'lodash';
+import { BACKEND_URL } from '../../common/constants/global.constant';
 
 interface IForm {
    keyword: string;
@@ -69,6 +70,8 @@ const SearchText = styled.Text`
 `;
 
 const Search = () => {
+   const numColumns = 4;
+   const { width } = useWindowDimensions();
    const { handleSubmit, setValue, register, watch } = useForm<IForm>();
    const [startQueryFn, { loading, data, called }] = useLazyQuery(SEARCH_PHOTOS);
 
@@ -82,12 +85,31 @@ const Search = () => {
       });
    };
 
+   const RenderItem = ({ item: photo }: { item: any }) => {
+      if (_.isEmpty(photo?.file)) return null;
+      let uri = '';
+      let localUri = '';
+
+      if (process.env.NODE_ENV === 'development') {
+         uri = photo?.file.replace('http://localhost:8000/', '');
+         localUri = `${BACKEND_URL}:8000/${uri}`;
+      }
+
+      return (
+         <TouchableOpacity>
+            <Image source={{ uri: localUri }} style={{ width: width / numColumns, height: 100 }} />
+         </TouchableOpacity>
+      );
+   };
+
    useEffect(() => {
       register('keyword', {
          required: true,
          minLength: 3,
       });
    }, []);
+
+   console.log(data?.searchPhotos?.photos);
 
    return (
       <DismissKeyBoardComponent>
@@ -122,10 +144,24 @@ const Search = () => {
                   </SearchContainer>
                ) : null}
 
-               {!_.isEmpty(data?.searchPhotos) && _.isEmpty(data?.searchPhotos?.photos) ? (
-                  <SearchContainer>
-                     <SearchText>Couldn't find anything</SearchText>
-                  </SearchContainer>
+               {!_.isEmpty(data?.searchPhotos) ? (
+                  _.isEmpty(data?.searchPhotos?.photos) ? (
+                     <SearchContainer>
+                        <SearchText>Couldn't find anything</SearchText>
+                     </SearchContainer>
+                  ) : (
+                     <>
+                        <FlatList
+                           numColumns={numColumns}
+                           data={data?.searchPhotos?.photos}
+                           keyExtractor={(photo) => photo.id.toString()}
+                           renderItem={({ item }) => {
+                              console.log(item);
+                              return <RenderItem item={item} />;
+                           }}
+                        />
+                     </>
+                  )
                ) : null}
             </Container>
          </PageLayoutComponent>
