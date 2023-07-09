@@ -97,7 +97,7 @@ const PhotoComponent = ({
    commentNumber: _commentNumber,
 }: IPhotoComponent) => {
    const { width, height } = useWindowDimensions();
-   const [imageHeight, setImageHeight] = useState<number>(height - 450);
+   const [_imageHeight, setImageHeight] = useState<number>(height - 450);
    const [fileName, setFileName] = useState<string>('');
    const navigation = useNavigation<NavigationType>();
 
