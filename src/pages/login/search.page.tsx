@@ -8,6 +8,8 @@ import { gql, useLazyQuery } from '@apollo/client';
 import { ActivityIndicator, FlatList, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
 import * as _ from 'lodash';
 import { BACKEND_URL } from '../../common/constants/global.constant';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
 interface IForm {
    keyword: string;
@@ -69,11 +71,23 @@ const SearchText = styled.Text`
    font-weight: 600;
 `;
 
+type NavRootStackParamList = {
+   Photo: {
+      photoId: number;
+   };
+};
+
+type NavRootStackRouteName = 'Photo';
+
+type NavigationType = NativeStackNavigationProp<NavRootStackParamList, NavRootStackRouteName>;
+
 const Search = () => {
    const numColumns = 4;
    const { width } = useWindowDimensions();
    const { handleSubmit, setValue, register, watch } = useForm<IForm>();
    const [startQueryFn, { loading, data, called }] = useLazyQuery(SEARCH_PHOTOS);
+
+   const navigation = useNavigation<NavigationType>();
 
    const onValid = ({ keyword }: IForm) => {
       startQueryFn({
@@ -96,7 +110,13 @@ const Search = () => {
       }
 
       return (
-         <TouchableOpacity>
+         <TouchableOpacity
+            onPress={() =>
+               navigation.navigate('Photo', {
+                  photoId: photo.id,
+               })
+            }
+         >
             <Image source={{ uri: localUri }} style={{ width: width / numColumns, height: 100 }} />
          </TouchableOpacity>
       );

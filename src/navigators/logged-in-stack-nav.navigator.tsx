@@ -1,11 +1,10 @@
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Profile from '../pages/login/profile.page';
 import Photo from '../pages/login/photo.page';
 import Feed from '../pages/login/feed.page';
 import Search from '../pages/login/search.page';
 import Notifications from '../pages/login/notifications.page';
 import Me from '../pages/login/me.page';
-import { NavRootStackParamList } from '../../App';
 import Likes from '../pages/login/likes.page';
 import Comments from '../pages/login/comments.page';
 
@@ -13,9 +12,20 @@ interface ILoggedInStackNav {
    screenName?: string;
 }
 
-export type NavigationType = NativeStackNavigationProp<NavRootStackParamList, 'LoggedInStacks', 'Profile'>;
+type RootStackParamList = {
+   Search: undefined;
+   Feed: undefined;
+   Profile: { username: string };
+   Notifications: undefined;
+   Me: undefined;
+   Photo: {
+      photoId: number;
+   };
+   Likes: undefined;
+   Comments: undefined;
+};
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const LoggedInStackNav = ({ screenName }: ILoggedInStackNav) => {
    return (

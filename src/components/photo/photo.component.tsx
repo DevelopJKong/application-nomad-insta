@@ -19,6 +19,7 @@ interface IPhotoComponent {
    isLiked: boolean;
    likes: number;
    commentNumber: number;
+   fullView?: boolean;
 }
 
 const TOGGLE_LIKE_MUTATION = gql`
@@ -95,6 +96,7 @@ const PhotoComponent = ({
    isLiked,
    likes,
    commentNumber: _commentNumber,
+   fullView = false,
 }: IPhotoComponent) => {
    const { width, height } = useWindowDimensions();
    const [_imageHeight, setImageHeight] = useState<number>(height - 450);
