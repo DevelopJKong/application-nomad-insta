@@ -33,6 +33,7 @@ const FEED_QUERY = gql`
 `;
 
 const Feed = () => {
+   const [pageCount, setPageCount] = useState<number>(2);
    const [refreshing, setRefreshing] = useState<boolean>(false);
 
    const { data, loading, refetch, fetchMore } = useQuery(FEED_QUERY, {
@@ -49,6 +50,7 @@ const Feed = () => {
 
    const refresh = async () => {
       setRefreshing(true);
+      setPageCount(2);
       await refetch();
       setRefreshing(false);
    };
@@ -57,16 +59,18 @@ const Feed = () => {
       <PageLayoutComponent>
          <ScreenLayoutComponent loading={loading}>
             <FlatList
-               onEndReachedThreshold={0.5}
-               onEndReached={() =>
+               onEndReachedThreshold={0.7}
+               onEndReached={() => {
+                  if (data?.seeFeed?.photos?.length < pageCount) return;
+                  setPageCount(pageCount + 1);
                   fetchMore({
                      variables: {
                         seeFeedInput: {
-                           page: data?.seeFeed?.photos?.length,
+                           page: pageCount,
                         },
                      },
-                  })
-               }
+                  });
+               }}
                refreshing={refreshing}
                onRefresh={refresh}
                style={{ width: '100%' }}

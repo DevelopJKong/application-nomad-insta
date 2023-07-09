@@ -166,7 +166,7 @@ const PhotoComponent = ({
                width,
                height: height - 200,
             }}
-            source={{ uri: fileName ? fileName : 'http://localhost:5000' }}
+            source={{ uri: fileName ? fileName : 'http://localhost:8000' }}
          />
          <ExtraContainer>
             <Actions>
