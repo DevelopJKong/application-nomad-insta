@@ -103,7 +103,6 @@ const PhotoComponent = ({
 
    useEffect(() => {
       Image.getSize(file.replace('http://localhost:8000', `${BACKEND_URL}:8000`), (width, height) => {
-         console.log(imageHeight);
          setImageHeight(height / 3);
          setFileName(file.replace('http://localhost:8000', `${BACKEND_URL}:8000`));
       });

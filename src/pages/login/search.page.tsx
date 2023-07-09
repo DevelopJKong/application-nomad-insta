@@ -4,10 +4,25 @@ import PageLayoutComponent from '../../components/layout/page-layout.component';
 import DismissKeyBoardComponent from '../../components/dismiss-key-board.component';
 import { useForm } from 'react-hook-form';
 import { EvilIcons } from '@expo/vector-icons';
+import { gql, useLazyQuery } from '@apollo/client';
 
 interface IForm {
    keyboard: string;
 }
+
+const SEARCH_PHOTOS = gql`
+   query searchPhotos($input: SearchPhotosInput!) {
+      searchPhotos(input: $input) {
+         ok
+         error
+         message
+         photos {
+            id
+            file
+         }
+      }
+   }
+`;
 
 const Container = styled.View`
    background-color: black;
@@ -46,6 +61,7 @@ const SearchIcon = styled(EvilIcons)`
 
 const Search = () => {
    const { setValue, register, watch } = useForm<IForm>();
+   const [startQueryFn, { loading, data }] = useLazyQuery(SEARCH_PHOTOS);
 
    useEffect(() => {
       register('keyboard');

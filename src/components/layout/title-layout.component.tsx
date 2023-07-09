@@ -14,7 +14,7 @@ const Container = styled.SafeAreaView`
 
 const TitleWrapper = styled.View`
    width: 100%;
-   height: 50px;
+   height: 70px;
    justify-content: center;
    align-content: center;
    position: relative;
@@ -23,15 +23,16 @@ const TitleWrapper = styled.View`
 const Title = styled.Text`
    width: 100%;
    text-align: center;
+   line-height: 50px;
    color: white;
    font-size: 18px;
-   height: 30px;
+   height: 50px;
 `;
 
 const RightArrow = styled.Pressable`
    position: absolute;
-   width: 30px;
-   height: 30px;
+   width: 50px;
+   height: 50px;
    justify-content: center;
    align-items: center;
    left: 10px;

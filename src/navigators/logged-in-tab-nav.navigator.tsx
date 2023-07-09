@@ -1,13 +1,16 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Search from '../pages/login/search.page';
-import { View } from 'react-native';
+import { Image, View } from 'react-native';
 import TabIcon from '../components/nav/tab-icon.component';
 import LoggedInStackNav from './logged-in-stack-nav.navigator';
+import useMe from '../hooks/use-me.hook';
+import * as _ from 'lodash';
 
 const Tabs = createBottomTabNavigator();
 
 const LoggedInTabNav = () => {
+   const { data } = useMe();
    return (
       <Tabs.Navigator
          screenOptions={{
@@ -59,9 +62,20 @@ const LoggedInTabNav = () => {
          <Tabs.Screen
             name={'TabsMe'}
             options={{
-               tabBarIcon: ({ focused, color, size: _size }) => (
-                  <TabIcon iconName={'person'} color={color} focused={focused} />
-               ),
+               tabBarIcon: ({ focused, color, size: _size }) =>
+                  _.isEmpty(data?.me?.avatar) ? (
+                     <TabIcon iconName={'person'} color={color} focused={focused} />
+                  ) : (
+                     <Image
+                        source={{ uri: data?.me?.avatar }}
+                        style={{
+                           height: 20,
+                           width: 20,
+                           borderRadius: 10,
+                           ...(focused && { borderColor: 'white', borderWidth: 1 }),
+                        }}
+                     />
+                  ),
             }}
          >
             {() => LoggedInStackNav({ screenName: 'Me' })}

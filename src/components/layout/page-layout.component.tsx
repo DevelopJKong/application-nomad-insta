@@ -17,7 +17,7 @@ const LogoWrapper = styled.View`
    position: relative;
    width: 100%;
    height: 70px;
-   justify-content: space-between;
+   justify-content: center;
    align-items: center;
    flex-direction: row;
 `;
@@ -34,16 +34,18 @@ const LogoImage = styled.Image`
    height: 60%;
 `;
 
+const BtnWrapper = styled.View`
+   position: absolute;
+   right: 25px;
+`;
+
 const Btn = styled.Button`
    width: 20px;
    height: 20px;
-   position: absolute;
-   right: 0;
 `;
 
-const SView = styled.View``;
-
 const SText = styled.Text`
+   font-size: 18px;
    color: white;
 `;
 
@@ -52,16 +54,18 @@ const PageLayoutComponent = ({ children, title }: IPageLayoutComponent) => {
    return (
       <Container>
          <LogoWrapper>
-            <SView></SView>
             {!_.isEmpty(title) ? (
-               <SText>{title}</SText>
+               <>
+                  <SText>{title}</SText>
+                  <BtnWrapper>
+                     <Btn title='Logout' onPress={() => logout()} />
+                  </BtnWrapper>
+               </>
             ) : (
                <Logo>
                   <LogoImage source={require('../../../assets/logo.png')} />
                </Logo>
             )}
-
-            <Btn title='Logout' onPress={() => logout()} />
          </LogoWrapper>
          {children}
       </Container>
