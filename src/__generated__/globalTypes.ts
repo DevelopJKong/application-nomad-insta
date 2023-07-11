@@ -19,11 +19,19 @@ export interface LoginInput {
   password: string;
 }
 
+export interface SearchPhotosInput {
+  keyword?: string | null;
+}
+
 export interface SeeFeedInput {
   page: number;
 }
 
 export interface SeeLikesInput {
+  id: number;
+}
+
+export interface SeePhotoInput {
   id: number;
 }
 
