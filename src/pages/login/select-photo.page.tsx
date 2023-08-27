@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
 import * as MediaLibrary from 'expo-media-library';
-import { FlatList, Image, useWindowDimensions } from 'react-native';
+import { FlatList, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../../styled';
 
 const Container = styled.View`
    flex: 1;
@@ -25,14 +26,24 @@ const IconContainer = styled.View`
    position: absolute;
 `;
 
-const SelectPhoto = () => {
+const HeaderRightText = styled.Text`
+   color: ${colors.blue};
+   font-size: 18px;
+`;
+
+const SelectPhoto = ({ navigation }: any) => {
+   // ! 기본 state 모음
    const [_ok, setOk] = useState<boolean>(false);
    const [photos, setPhotos] = useState<any>([]);
    const [chosenPhoto, setChosenPhoto] = useState<string>('');
 
+   // ! 기본 변수 모음
    const numColumns = 4;
+
+   // ! dimension 모음
    const { width } = useWindowDimensions();
 
+   // ! 기본 함수 모음
    const getPhotos = async () => {
       const { assets: photos } = await MediaLibrary.getAssetsAsync();
       setPhotos(photos);
@@ -66,14 +77,26 @@ const SelectPhoto = () => {
          >
             <Image source={{ uri: photo.uri }} style={{ width: width / numColumns, height: 100 }} />
             <IconContainer>
-               <Ionicons name='checkmark-circle' size={18} color='white' />
+               <Ionicons name='checkmark-circle' size={18} color={photo.uri === chosenPhoto ? colors.blue : 'white'} />
             </IconContainer>
          </ImageContainer>
       );
    };
 
+   const HeaderRight = () => (
+      <TouchableOpacity onPress={() => alert('준비중입니다.')}>
+         <HeaderRightText>Next</HeaderRightText>
+      </TouchableOpacity>
+   );
+
    useEffect(() => {
       getPermissions();
+   }, []);
+
+   useEffect(() => {
+      navigation.setOptions({
+         headerRight: HeaderRight,
+      });
    }, []);
 
    console.log(photos);

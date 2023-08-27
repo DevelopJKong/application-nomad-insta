@@ -3,7 +3,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import SelectPhoto from '../pages/login/select-photo.page';
 import TakePhoto from '../pages/login/take-photo.page';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -31,11 +31,11 @@ const UploadNav = () => {
                            <Ionicons color={tintColor} name='close' size={28} />
                         </TouchableOpacity>
                      ),
-                     headerRight: ({ tintColor }) => (
-                        <TouchableOpacity onPress={() => alert('준비중입니다.')}>
-                           <AntDesign color={tintColor} name='right' size={28} />
-                        </TouchableOpacity>
-                     ),
+                     // headerRight: ({ tintColor }) => (
+                     //    <TouchableOpacity onPress={() => alert('준비중입니다.')}>
+                     //       <AntDesign color={tintColor} name='right' size={28} />
+                     //    </TouchableOpacity>
+                     // ),
                      headerStyle: {
                         backgroundColor: 'black',
                      },
