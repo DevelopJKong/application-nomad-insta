@@ -35,7 +35,9 @@ const SelectPhoto = ({ navigation }: any) => {
    // ! 기본 state 모음
    const [_ok, setOk] = useState<boolean>(false);
    const [photos, setPhotos] = useState<any>([]);
-   const [chosenPhoto, setChosenPhoto] = useState<string>('');
+   const [chosenPhoto, setChosenPhoto] = useState<string>(
+      'https://noticon-static.tammolo.com/dgggcrkxq/image/upload/v1566914617/noticon/edqjxqjzqjzqjzqjzqjz.png',
+   );
 
    // ! 기본 변수 모음
    const numColumns = 4;
@@ -98,8 +100,6 @@ const SelectPhoto = ({ navigation }: any) => {
          headerRight: HeaderRight,
       });
    }, []);
-
-   console.log(photos);
 
    return (
       <Container>
