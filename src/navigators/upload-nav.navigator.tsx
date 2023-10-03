@@ -18,6 +18,7 @@ const UploadNav = () => {
          screenOptions={{
             tabBarStyle: { backgroundColor: 'black' },
             tabBarActiveTintColor: 'white',
+            animationEnabled: false,
          }}
       >
          <Tab.Screen name='Select'>
