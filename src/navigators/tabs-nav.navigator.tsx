@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Search from '../pages/login/search.page';
+import Search from '../screens/login/search.screen';
 import { Image, View } from 'react-native';
 import TabIcon from '../components/nav/tab-icon.component';
 import LoggedInStackNav from './logged-in-stack-nav.navigator';
