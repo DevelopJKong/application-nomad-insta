@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/native';
-import { Camera, CameraType } from 'expo-camera';
-import { TouchableOpacity } from 'react-native';
+import { Camera, CameraType, FlashMode } from 'expo-camera';
+import { StatusBar, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
-import { CameraTypeToFacingMode } from 'expo-camera/build/WebConstants';
+import { useNavigation } from '@react-navigation/native';
 
 const Container = styled.View`
    flex: 1;
@@ -35,12 +35,26 @@ const ButtonsContainer = styled.View`
    justify-content: space-between;
    align-items: center;
 `;
+const ActionsContainer = styled.View`
+   flex-direction: row;
+`;
+
+const CloseButton = styled.TouchableOpacity`
+   position: absolute;
+   top: 50px;
+   left: 20px;
+`;
 
 const TakePhoto = () => {
-   const [ok, setOk] = useState(false);
+   // ! 기본 state 모음
+   const [_ok, setOk] = useState(false);
    const [cameraType, setCameraType] = useState(CameraType.back);
    const [zoom, setZoom] = useState(0);
    const [flashMode, setFlashMode] = useState('off');
+
+   // ! navigation 모음
+   const navigation = useNavigation<any>();
+
    const getPermissions = async () => {
       const permissions = await Camera.requestCameraPermissionsAsync();
       setOk(permissions.granted);
@@ -58,7 +72,18 @@ const TakePhoto = () => {
       setZoom(e);
    };
 
-   const onFlashChange = () => {};
+   const onFlashChange = () => {
+      if (flashMode === FlashMode.off) {
+         // on
+         setFlashMode(FlashMode.on);
+      } else if (flashMode === FlashMode.on) {
+         // off
+         setFlashMode(FlashMode.off);
+      } else if (flashMode === FlashMode.auto) {
+         // auto
+         setFlashMode(FlashMode.auto);
+      }
+   };
 
    useEffect(() => {
       getPermissions();
@@ -66,7 +91,18 @@ const TakePhoto = () => {
 
    return (
       <Container>
-         <Camera type={cameraType} style={{ flex: 1 }} zoom={zoom} />
+         <StatusBar hidden={true} />
+         <Camera
+            type={cameraType}
+            style={{ flex: 1 }}
+            zoom={zoom}
+            flashMode={
+               flashMode === FlashMode.off ? FlashMode.off : flashMode === FlashMode.on ? FlashMode.on : FlashMode.auto
+            }
+         />
+         <CloseButton onPress={() => navigation.navigate('Tabs')}>
+            <Ionicons name='close' color='white' size={30} />
+         </CloseButton>
          <Actions>
             <SliderContainer>
                <Slider
@@ -80,13 +116,22 @@ const TakePhoto = () => {
             </SliderContainer>
             <ButtonsContainer>
                <TakePhotoBtn />
-               <TouchableOpacity onPress={onCameraSwitch}>
-                  <Ionicons
-                     name={cameraType === CameraType.front ? 'camera-reverse' : 'camera'}
-                     size={30}
-                     color={'white'}
-                  />
-               </TouchableOpacity>
+               <ActionsContainer>
+                  <TouchableOpacity onPress={onFlashChange} style={{ marginRight: 30 }}>
+                     <Ionicons
+                        size={30}
+                        color='white'
+                        name={flashMode === FlashMode.off ? 'flash-off' : flashMode === FlashMode.on ? 'flash' : 'eye'}
+                     />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={onCameraSwitch}>
+                     <Ionicons
+                        name={cameraType === CameraType.front ? 'camera-reverse' : 'camera'}
+                        size={30}
+                        color={'white'}
+                     />
+                  </TouchableOpacity>
+               </ActionsContainer>
             </ButtonsContainer>
          </Actions>
       </Container>
