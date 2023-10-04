@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/native';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { Platform, StatusBar, TouchableOpacity } from 'react-native';
@@ -51,11 +51,14 @@ const TakePhoto = () => {
    const [cameraType, setCameraType] = useState(CameraType.back);
    const [zoom, setZoom] = useState(0);
    const [flashMode, setFlashMode] = useState('off');
-
-   const isFocused = useIsFocused();
+   const [cameraReady, setCameraReady] = useState(false);
 
    // ! navigation 모음
    const navigation = useNavigation<any>();
+   const isFocused = useIsFocused();
+
+   // ! useRef 모음
+   const cameraRef = useRef<Camera>(null);
 
    const getPermissions = async () => {
       const permissions = await Camera.requestCameraPermissionsAsync();
@@ -87,6 +90,20 @@ const TakePhoto = () => {
       }
    };
 
+   const onCameraReady = () => {
+      setCameraReady(true);
+   };
+
+   const takePhoto = async () => {
+      if (cameraRef.current && cameraReady) {
+         const { uri } = await cameraRef.current.takePictureAsync({
+            quality: 1,
+            exif: true,
+         });
+      }
+   };
+
+   // ! useEffect 모음
    useEffect(() => {
       getPermissions();
    }, []);
@@ -96,6 +113,7 @@ const TakePhoto = () => {
          <StatusBar hidden={true} />
          {isFocused && (
             <Camera
+               ref={cameraRef}
                type={cameraType}
                style={{ flex: 1 }}
                zoom={zoom}
@@ -106,6 +124,7 @@ const TakePhoto = () => {
                      ? FlashMode.on
                      : FlashMode.auto
                }
+               onCameraReady={onCameraReady}
             />
          )}
          <CloseButton onPress={() => navigation.navigate('Tabs')}>
@@ -123,7 +142,7 @@ const TakePhoto = () => {
                />
             </SliderContainer>
             <ButtonsContainer>
-               <TakePhotoBtn />
+               <TakePhotoBtn onPress={takePhoto} />
                <ActionsContainer>
                   {Platform.OS === 'ios' && (
                      <TouchableOpacity onPress={onFlashChange} style={{ marginRight: 30 }}>
