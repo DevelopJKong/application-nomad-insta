@@ -1,7 +1,7 @@
 import { ApolloClient, createHttpLink, InMemoryCache, makeVar } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setContext } from '@apollo/client/link/context';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { seeFeed_seeFeed as ISeeFeed, seeFeed_seeFeed_photos as ISeeFeedPhotos } from './__generated__/seeFeed';
 
 export const isLoggedInVar = makeVar(false);
@@ -17,7 +17,7 @@ export const logUserIn = async (token: string, success: 'yes' | 'no') => {
 };
 
 const httpLink = createHttpLink({
-   uri: `http://172.30.1.19:8000/graphql`,
+   uri: `http://172.30.1.98:8000/graphql`,
 });
 
 const authLink = setContext((_, { headers }) => {
