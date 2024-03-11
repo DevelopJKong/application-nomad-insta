@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components/native';
 import { Camera, CameraType, FlashMode } from 'expo-camera';
-import { Image, Platform, StatusBar, Text, TouchableOpacity } from 'react-native';
+import { Alert, Image, Platform, StatusBar, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-// import * as MediaLibrary from 'expo-media-library';
+import { useNavigation } from '@react-navigation/native';
+import * as MediaLibrary from 'expo-media-library';
 
 const Container = styled.View`
    flex: 1;
@@ -47,9 +47,13 @@ const CloseButton = styled.TouchableOpacity`
    left: 20px;
 `;
 
+const PhotoActions = styled(Actions)`
+   flex-direction: row;
+`;
+
 const PhotoAction = styled.TouchableOpacity`
    background-color: white;
-   padding: 5px 10px;
+   padding: 10px 25px;
    border-radius: 4px;
 `;
 
@@ -104,6 +108,30 @@ const TakePhoto = () => {
       }
    };
 
+   const goToUpload = async (save: boolean) => {
+      if (save) {
+         // save photo
+         // saveToLibraryAsync 는 사진을 저장하는 함수 아무것도 return 하지 않음
+         await MediaLibrary.saveToLibraryAsync(takenPhoto);
+         return;
+      }
+
+      // upload photo
+   };
+
+   const onUpload = () => {
+      Alert.alert('Save photo?', 'Save photo & upload or just upload', [
+         {
+            text: 'Save & Upload',
+            onPress: () => goToUpload(true),
+         },
+         {
+            text: 'Just Upload',
+            onPress: () => goToUpload(false),
+         },
+      ]);
+   };
+
    const onCameraReady = () => {
       setCameraReady(true);
    };
@@ -114,8 +142,7 @@ const TakePhoto = () => {
             quality: 1,
             exif: true,
          });
-         // saveToLibraryAsync는 사진을 저장하는 함수 아무것도 return 하지 않음
-         // const asset = await MediaLibrary.createAssetAsync(uri);
+
          setTakenPhoto(uri);
       }
    };
@@ -194,17 +221,14 @@ const TakePhoto = () => {
                </ButtonsContainer>
             </Actions>
          ) : (
-            <Actions>
+            <PhotoActions>
                <PhotoAction onPress={onDismiss}>
                   <PhotoActionText>Dismiss</PhotoActionText>
                </PhotoAction>
                <PhotoAction>
                   <PhotoActionText>Upload</PhotoActionText>
                </PhotoAction>
-               <PhotoAction>
-                  <PhotoActionText>Save & Upload</PhotoActionText>
-               </PhotoAction>
-            </Actions>
+            </PhotoActions>
          )}
       </Container>
    );
