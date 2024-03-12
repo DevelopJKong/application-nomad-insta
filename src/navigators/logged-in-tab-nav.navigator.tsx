@@ -1,8 +1,9 @@
 import React from 'react';
-import * as _ from 'lodash';
+import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabsNav from './tabs-nav.navigator';
 import UploadNav from './upload-nav.navigator';
+import UploadForm from '../screens/login/upload-form';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,8 +16,33 @@ const LoggedInTabNav = () => {
             presentation: 'modal',
          }}
       >
-         <Stack.Screen name={'Tabs'} component={TabsNav} />
-         <Stack.Screen name={'Upload'} component={UploadNav} />
+         <Stack.Screen
+            name={'Tabs'}
+            options={{
+               headerShown: false,
+            }}
+            component={TabsNav}
+         />
+         <Stack.Screen
+            name={'Upload'}
+            options={{
+               headerShown: false,
+            }}
+            component={UploadNav}
+         />
+         <Stack.Screen
+            name={'UploadForm'}
+            options={{
+               headerBackTitleVisible: false,
+               headerLeft: ({ tintColor }) => <Ionicons color={tintColor} name='close' size={28} />,
+               title: 'Upload',
+               headerTintColor: 'white',
+               headerStyle: {
+                  backgroundColor: 'black',
+               },
+            }}
+            component={UploadForm}
+         />
       </Stack.Navigator>
    );
 };

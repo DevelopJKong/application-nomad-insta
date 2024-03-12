@@ -4,7 +4,7 @@ import { Camera, CameraType, FlashMode } from 'expo-camera';
 import { Alert, Image, Platform, StatusBar, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import * as MediaLibrary from 'expo-media-library';
 
 const Container = styled.View`
@@ -73,7 +73,7 @@ const TakePhoto = () => {
 
    // ! navigation 모음
    const navigation = useNavigation<any>();
-   // const isFocused = useIsFocused();
+   const isFocused = useIsFocused();
 
    // ! useRef 모음
    const cameraRef = useRef<Camera>(null);
@@ -115,6 +115,8 @@ const TakePhoto = () => {
          await MediaLibrary.saveToLibraryAsync(takenPhoto);
          return;
       }
+
+      navigation.navigate('UploadForm', { file: takenPhoto });
 
       // upload photo
    };
@@ -158,22 +160,25 @@ const TakePhoto = () => {
 
    return (
       <Container>
-         <StatusBar hidden={true} />
+         {isFocused ? <StatusBar hidden={true} /> : null}
+
          {takenPhoto === '' ? (
-            <Camera
-               ref={cameraRef}
-               type={cameraType}
-               style={{ flex: 1 }}
-               zoom={zoom}
-               flashMode={
-                  flashMode === FlashMode.off
-                     ? FlashMode.off
-                     : flashMode === FlashMode.on
-                     ? FlashMode.on
-                     : FlashMode.auto
-               }
-               onCameraReady={onCameraReady}
-            />
+            isFocused ? (
+               <Camera
+                  ref={cameraRef}
+                  type={cameraType}
+                  style={{ flex: 1 }}
+                  zoom={zoom}
+                  flashMode={
+                     flashMode === FlashMode.off
+                        ? FlashMode.off
+                        : flashMode === FlashMode.on
+                        ? FlashMode.on
+                        : FlashMode.auto
+                  }
+                  onCameraReady={onCameraReady}
+               />
+            ) : null
          ) : (
             <Image source={{ uri: takenPhoto }} style={{ flex: 1 }} />
          )}
@@ -225,7 +230,7 @@ const TakePhoto = () => {
                <PhotoAction onPress={onDismiss}>
                   <PhotoActionText>Dismiss</PhotoActionText>
                </PhotoAction>
-               <PhotoAction>
+               <PhotoAction onPress={onUpload}>
                   <PhotoActionText>Upload</PhotoActionText>
                </PhotoAction>
             </PhotoActions>

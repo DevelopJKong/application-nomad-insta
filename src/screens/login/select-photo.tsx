@@ -4,6 +4,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { FlatList, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../../styled';
+import { StatusBar } from 'expo-status-bar';
 
 const Container = styled.View`
    flex: 1;
@@ -86,7 +87,13 @@ const SelectPhoto = ({ navigation }: any) => {
    };
 
    const HeaderRight = () => (
-      <TouchableOpacity onPress={() => alert('준비중입니다.')}>
+      <TouchableOpacity
+         onPress={() =>
+            navigation.navigate('UploadForm', {
+               file: chosenPhoto,
+            })
+         }
+      >
          <HeaderRightText>Next</HeaderRightText>
       </TouchableOpacity>
    );
@@ -99,12 +106,15 @@ const SelectPhoto = ({ navigation }: any) => {
       navigation.setOptions({
          headerRight: HeaderRight,
       });
-   }, []);
+   }, [chosenPhoto]);
 
    return (
       <Container>
+         <StatusBar hidden={false} />
          <Top>
-            <Image source={{ uri: chosenPhoto }} style={{ width: '100%', height: '100%' }} />
+            {chosenPhoto !== '' ? (
+               <Image source={{ uri: chosenPhoto }} style={{ width: '100%', height: '100%' }} />
+            ) : null}
          </Top>
          <Bottom>
             <FlatList
