@@ -5,7 +5,7 @@ import AuthButton from '../../components/auth/auth-button';
 import styled from 'styled-components/native';
 import { Input } from '../../components/auth/auth-shared';
 import { useForm } from 'react-hook-form';
-import { createUserMutation, createUserMutationVariables } from '../../__generated__/createUserMutation';
+import { CreateUserMutationMutation, CreateUserMutationMutationVariables } from '../../gql/graphql';
 
 interface IForm {
    firstName: string;
@@ -41,7 +41,7 @@ const CreateAccount = ({ navigation }: any) => {
    const emailRef: React.MutableRefObject<any> = useRef(null);
    const passwordRef: React.MutableRefObject<any> = useRef(null);
 
-   const onCompleted = (data: createUserMutation) => {
+   const onCompleted = (data: CreateUserMutationMutation) => {
       const {
          createUser: { ok },
       } = data;
@@ -55,12 +55,12 @@ const CreateAccount = ({ navigation }: any) => {
       }
    };
 
-   const [createUserMutation, { loading }] = useMutation<createUserMutation, createUserMutationVariables>(
-      CREATE_USER_MUTATION,
-      {
-         onCompleted,
-      },
-   );
+   const [createUserMutation, { loading }] = useMutation<
+      CreateUserMutationMutation,
+      CreateUserMutationMutationVariables
+   >(CREATE_USER_MUTATION, {
+      onCompleted,
+   });
 
    const onValid = async (data: IForm) => {
       if (loading) return;

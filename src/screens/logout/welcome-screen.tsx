@@ -6,11 +6,11 @@ import AuthLayout from '../../components/auth/auth-layout';
 import AuthButton from '../../components/auth/auth-button';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { logUserIn } from '../../apollo';
-import { loginMutation, loginMutationVariables } from '../../__generated__/loginMutation';
 import { LOGIN_MUTATION } from './login-screen';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LOGIN_KEY } from '../../common/constants/global-constant';
+import { LoginMutationMutation, LoginMutationMutationVariables } from '../../gql/graphql';
 
 const LoginLink = styled.Text`
    color: ${colors.blue};
@@ -30,7 +30,7 @@ const Welcome = ({ navigation }: any) => {
    const goToCreateAccount = () => navigation.navigate('CreateAccount');
    const goToLogin = () => navigation.navigate('Login');
 
-   const onCompleted = async (data: loginMutation) => {
+   const onCompleted = async (data: LoginMutationMutation) => {
       const {
          login: { ok, token },
       } = data;
@@ -39,9 +39,12 @@ const Welcome = ({ navigation }: any) => {
       }
    };
 
-   const [loginMutation, { loading }] = useMutation<loginMutation, loginMutationVariables>(LOGIN_MUTATION, {
-      onCompleted,
-   });
+   const [loginMutation, { loading }] = useMutation<LoginMutationMutation, LoginMutationMutationVariables>(
+      LOGIN_MUTATION,
+      {
+         onCompleted,
+      },
+   );
 
    useLayoutEffect(() => {
       console.log('here');

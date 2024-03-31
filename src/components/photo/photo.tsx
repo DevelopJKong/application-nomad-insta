@@ -6,7 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { ApolloCache, FetchResult, gql, useMutation } from '@apollo/client';
 import { BACKEND_URL } from '../../common/constants/global-constant';
-import { toggleLike, toggleLikeVariables } from '../../__generated__/toggleLike';
+import { ToggleLikeMutation, ToggleLikeMutationVariables } from '../../gql/graphql';
 
 interface IPhotoComponent {
    id: number;
@@ -110,7 +110,7 @@ const PhotoComponent = ({
       });
    }, [file]);
 
-   const updateToggleLike = (cache: ApolloCache<any>, result: Omit<FetchResult<toggleLike>, 'context'>) => {
+   const updateToggleLike = (cache: ApolloCache<any>, result: Omit<FetchResult<ToggleLikeMutation>, 'context'>) => {
       if (!result.data) return;
       const {
          data: {
@@ -135,7 +135,7 @@ const PhotoComponent = ({
          });
       }
    };
-   const [toggleLikeMutation] = useMutation<toggleLike, toggleLikeVariables>(TOGGLE_LIKE_MUTATION, {
+   const [toggleLikeMutation] = useMutation<ToggleLikeMutation, ToggleLikeMutationVariables>(TOGGLE_LIKE_MUTATION, {
       variables: {
          toggleLikeInput: {
             id,

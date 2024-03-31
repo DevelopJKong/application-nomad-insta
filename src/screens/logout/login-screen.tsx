@@ -5,9 +5,9 @@ import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components/native';
 import { gql, useMutation } from '@apollo/client';
-import { loginMutation, loginMutationVariables } from '../../__generated__/loginMutation';
 import { logUserIn } from '../../apollo';
 import * as SecureStore from 'expo-secure-store';
+import { LoginMutationMutation, LoginMutationMutationVariables } from '../../gql/graphql';
 
 interface IForm {
    email: string;
@@ -51,7 +51,7 @@ const Login = ({ route: { params } }: any) => {
 
    const passwordRef: React.MutableRefObject<any> = useRef(null);
 
-   const onCompleted = async (data: loginMutation) => {
+   const onCompleted = async (data: LoginMutationMutation) => {
       const {
          login: { ok, token },
       } = data;
@@ -60,9 +60,12 @@ const Login = ({ route: { params } }: any) => {
       }
    };
 
-   const [loginMutation, { loading }] = useMutation<loginMutation, loginMutationVariables>(LOGIN_MUTATION, {
-      onCompleted,
-   });
+   const [loginMutation, { loading }] = useMutation<LoginMutationMutation, LoginMutationMutationVariables>(
+      LOGIN_MUTATION,
+      {
+         onCompleted,
+      },
+   );
 
    const onNext = (nextOne: React.MutableRefObject<any>) => {
       nextOne?.current?.focus();

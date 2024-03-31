@@ -1,8 +1,8 @@
+import { Photo, SeeFeedOutput } from './gql/graphql';
 import { ApolloClient, createHttpLink, InMemoryCache, makeVar } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setContext } from '@apollo/client/link/context';
 import _ from 'lodash';
-import { seeFeed_seeFeed as ISeeFeed, seeFeed_seeFeed_photos as ISeeFeedPhotos } from './__generated__/seeFeed';
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar('');
@@ -34,15 +34,11 @@ export const cache = new InMemoryCache({
          fields: {
             seeFeed: {
                keyArgs: false,
-               merge(existing: ISeeFeed, incoming: ISeeFeed) {
+               merge(existing: SeeFeedOutput, incoming: SeeFeedOutput) {
                   if (existing && incoming && !_.isEqual(existing, incoming)) {
                      const photos = [
-                        ...(!_.isEmpty(existing?.photos as ISeeFeedPhotos[])
-                           ? (existing.photos as ISeeFeedPhotos[])
-                           : []),
-                        ...(!_.isEmpty(incoming?.photos as ISeeFeedPhotos[])
-                           ? (incoming.photos as ISeeFeedPhotos[])
-                           : []),
+                        ...(!_.isEmpty(existing?.photos as Photo[]) ? (existing.photos as Photo[]) : []),
+                        ...(!_.isEmpty(incoming?.photos as Photo[]) ? (incoming.photos as Photo[]) : []),
                      ];
 
                      return {
