@@ -5,7 +5,7 @@ import { Image, View } from 'react-native';
 import TabIcon from '../components/nav/tab-icon';
 import LoggedInStackNav from './logged-in-stack-nav';
 import useMe from '../hooks/use-me';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 const Tabs = createBottomTabNavigator();
 

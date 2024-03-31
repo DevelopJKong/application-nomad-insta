@@ -5,7 +5,7 @@ import { FlatList } from 'react-native';
 import PageLayoutComponent from '../../components/layout/page-layout';
 import ScreenLayoutComponent from '../../components/layout/screen-layout';
 import PhotoComponent from '../../components/photo/photo';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 const SEE_FEED_QUERY = gql`
    query seeFeed($seeFeedInput: SeeFeedInput!) {

@@ -1,7 +1,7 @@
 import styled from 'styled-components/native';
 import React from 'react';
 import useLogout from '../../hooks/use-logout';
-import * as _ from 'lodash';
+import _ from 'lodash';
 
 interface IPageLayoutComponent {
    children: React.ReactNode;
