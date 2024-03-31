@@ -17,7 +17,7 @@ export const logUserIn = async (token: string, success: 'yes' | 'no') => {
 };
 
 const httpLink = createHttpLink({
-   uri: `http://172.30.1.34:8000/graphql`,
+   uri: `http://172.30.1.6:8000/graphql`,
 });
 
 const authLink = setContext((_, { headers }) => {
