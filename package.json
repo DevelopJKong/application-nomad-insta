@@ -13,7 +13,7 @@
       "codegen": "graphql-codegen --config codegen.ts"
    },
    "dependencies": {
-      "@apollo/client": "^3.7.17",
+      "@apollo/client": "^3.9.9",
       "@expo/webpack-config": "^19.0.0",
       "@react-native-async-storage/async-storage": "1.18.2",
       "@react-native-community/slider": "4.4.2",
@@ -23,7 +23,7 @@
       "@react-navigation/native-stack": "^6.9.12",
       "apollo": "^2.34.0",
       "apollo3-cache-persist": "^0.14.1",
-      "expo": "^49.0.0",
+      "expo": "^49.0.22",
       "expo-camera": "~13.4.4",
       "expo-media-library": "~15.4.1",
       "expo-secure-store": "~12.3.1",
@@ -44,7 +44,7 @@
       "react-native-web-swiper": "^2.2.4",
       "react-native-webview": "13.2.2",
       "react-query": "^3.39.3",
-      "styled-components": "^5.3.9"
+      "styled-components": "^6.1.8"
    },
    "overrides": {
       "@apollo/client": {
@@ -71,8 +71,6 @@
       "@graphql-codegen/near-operation-file-preset": "^3.0.0",
       "@types/lodash": "^4.14.195",
       "@types/react": "~18.2.14",
-      "@types/styled-components": "^5.1.26",
-      "@types/styled-components-react-native": "^5.2.1",
       "@typescript-eslint/eslint-plugin": "^5.57.0",
       "@typescript-eslint/parser": "^5.57.0",
       "eslint": "^8.37.0",
