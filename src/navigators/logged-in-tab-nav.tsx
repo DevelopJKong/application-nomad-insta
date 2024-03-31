@@ -1,9 +1,9 @@
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TabsNav from './tabs-nav.navigator';
-import UploadNav from './upload-nav.navigator';
-import UploadForm from '../screens/login/upload-form';
+import TabsNav from './tabs-nav';
+import UploadNav from './upload-nav';
+import UploadForm from '../screens/login/upload-form-screen';
 
 const Stack = createNativeStackNavigator();
 

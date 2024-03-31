@@ -1,7 +1,7 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import SelectPhoto from '../screens/login/select-photo';
-import TakePhoto from '../screens/login/take-photo';
+import SelectPhoto from '../screens/login/select-photo-screen';
+import TakePhoto from '../screens/login/take-photo-screen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
