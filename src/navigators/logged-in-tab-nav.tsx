@@ -12,7 +12,6 @@ const LoggedInTabNav = () => {
       <Stack.Navigator
          screenOptions={{
             animation: 'fade_from_bottom',
-            headerShown: false,
             presentation: 'modal',
          }}
       >

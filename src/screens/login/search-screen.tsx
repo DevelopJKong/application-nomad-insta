@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
 import PageLayoutComponent from '../../components/layout/page-layout';
-import DismissKeyBoardComponent from '../../components/dismiss-key-board';
+import DismissKeyBoard from '../../components/dismiss-key-board';
 import { useForm } from 'react-hook-form';
 import { EvilIcons } from '@expo/vector-icons';
 import { gql, useLazyQuery } from '@apollo/client';
@@ -132,7 +132,7 @@ const Search = () => {
    console.log(data?.searchPhotos?.photos);
 
    return (
-      <DismissKeyBoardComponent>
+      <DismissKeyBoard>
          <PageLayoutComponent>
             <InputWrapper>
                <SearchIcon name='search' size={24} color='white' />
@@ -185,7 +185,7 @@ const Search = () => {
                ) : null}
             </Container>
          </PageLayoutComponent>
-      </DismissKeyBoardComponent>
+      </DismissKeyBoard>
    );
 };
 

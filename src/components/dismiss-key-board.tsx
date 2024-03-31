@@ -5,7 +5,7 @@ interface IDismissKeyBoardComponent {
    children: React.ReactNode;
 }
 
-const DismissKeyBoardComponent = ({ children }: IDismissKeyBoardComponent) => {
+const DismissKeyBoard = ({ children }: IDismissKeyBoardComponent) => {
    const dismissKeyboard = () => {
       Keyboard.dismiss();
    };
@@ -16,4 +16,4 @@ const DismissKeyBoardComponent = ({ children }: IDismissKeyBoardComponent) => {
    );
 };
 
-export default DismissKeyBoardComponent;
+export default DismissKeyBoard;
