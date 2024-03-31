@@ -2,6 +2,7 @@ import { Photo, SeeFeedOutput } from './gql/graphql';
 import { ApolloClient, createHttpLink, InMemoryCache, makeVar } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
 import _ from 'lodash';
 
 export const isLoggedInVar = makeVar(false);
@@ -28,6 +29,16 @@ const authLink = setContext((_, { headers }) => {
       },
    };
 });
+
+const onErrorLink = onError(({ graphQLErrors, networkError }) => {
+   if (graphQLErrors) {
+      console.log('graphQLErrors', graphQLErrors);
+   }
+   if (networkError) {
+      console.log('networkError', networkError);
+   }
+});
+
 export const cache = new InMemoryCache({
    typePolicies: {
       Query: {
@@ -55,7 +66,7 @@ export const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-   link: authLink.concat(httpLink),
+   link: authLink.concat(onErrorLink).concat(httpLink),
    cache,
 });
 export default client;

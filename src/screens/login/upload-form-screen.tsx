@@ -4,6 +4,20 @@ import DismissKeyBoard from '../../components/dismiss-key-board';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import { colors } from '../../styled';
+import { gql, useMutation } from '@apollo/client';
+import { FEED_PHOTO_FRAGMENT } from '../../fragments';
+import { ReactNativeFile } from 'apollo-upload-client';
+
+const UPLOAD_PHOTO_MUTATION = gql`
+   mutation uploadPhoto($file: Upload!, $caption: String) {
+      uploadPhoto(input: { photoFile: $file, caption: $caption }) {
+         ok
+         error
+         message
+      }
+   }
+   ${FEED_PHOTO_FRAGMENT}
+`;
 
 const Container = styled.View`
    flex: 1;
@@ -33,6 +47,9 @@ const UploadForm = ({ route, navigation }: any) => {
    // ! react-hook-form 모음
    const { register, handleSubmit, setValue } = useForm<any>();
 
+   // ! graphql 모음
+   const [uploadPhotoMutation, { loading }] = useMutation(UPLOAD_PHOTO_MUTATION);
+
    // ! 컴포넌트 모음
 
    const HeaderRightLoading = () => (
@@ -46,12 +63,29 @@ const UploadForm = ({ route, navigation }: any) => {
    );
 
    const HeaderRight = () => (
-      <TouchableOpacity onPress={() => {}}>
+      <TouchableOpacity
+         onPress={() => {
+            handleSubmit(onValid)();
+         }}
+      >
          <HeaderRightText>Next</HeaderRightText>
       </TouchableOpacity>
    );
 
-   const onValid = ({ caption }: any) => {};
+   const onValid = ({ caption }: any) => {
+      const file = new ReactNativeFile({
+         uri: route.params.file,
+         name: 'image.jpg',
+         type: 'image/jpeg',
+      });
+
+      uploadPhotoMutation({
+         variables: {
+            caption,
+            file: route.params.file,
+         },
+      });
+   };
 
    useEffect(() => {
       register('caption');
@@ -59,9 +93,10 @@ const UploadForm = ({ route, navigation }: any) => {
 
    useEffect(() => {
       navigation.setOptions({
-         headerRight: HeaderRight,
+         headerRight: loading ? HeaderRightLoading : HeaderRight,
+         ...(loading && { headerLeft: () => null }),
       });
-   }, []);
+   }, [loading]);
 
    return (
       <DismissKeyBoard>
