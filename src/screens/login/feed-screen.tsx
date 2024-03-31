@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from '../../fragments';
-import { FlatList } from 'react-native';
+import { FlatList, TouchableOpacity } from 'react-native';
 import PageLayoutComponent from '../../components/layout/page-layout';
 import ScreenLayoutComponent from '../../components/layout/screen-layout';
 import PhotoComponent from '../../components/photo/photo';
 import _ from 'lodash';
+import { Ionicons } from '@expo/vector-icons';
 
 const SEE_FEED_QUERY = gql`
    query seeFeed($seeFeedInput: SeeFeedInput!) {
@@ -32,7 +33,7 @@ const SEE_FEED_QUERY = gql`
    ${COMMENT_FRAGMENT}
 `;
 
-const Feed = () => {
+const Feed = ({ navigation }: any) => {
    const [pageCount, setPageCount] = useState<number>(2);
    const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -55,8 +56,19 @@ const Feed = () => {
       setRefreshing(false);
    };
 
+   const MessageButton = () => (
+      <TouchableOpacity
+         style={{ marginRight: 25 }}
+         onPress={() => {
+            navigation.navigate('Messages');
+         }}
+      >
+         <Ionicons name='paper-plane' size={24} color='white' />
+      </TouchableOpacity>
+   );
+
    return (
-      <PageLayoutComponent>
+      <PageLayoutComponent HeaderRight={MessageButton}>
          <ScreenLayoutComponent loading={loading}>
             <FlatList
                onEndReachedThreshold={0.7}

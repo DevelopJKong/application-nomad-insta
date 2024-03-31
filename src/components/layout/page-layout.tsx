@@ -6,6 +6,7 @@ import _ from 'lodash';
 interface IPageLayoutComponent {
    children: React.ReactNode;
    title?: string;
+   HeaderRight?: () => JSX.Element;
 }
 
 const Container = styled.SafeAreaView`
@@ -39,6 +40,11 @@ const BtnWrapper = styled.View`
    right: 25px;
 `;
 
+const RightWrapper = styled.View`
+   position: absolute;
+   right: 5px;
+`;
+
 const Btn = styled.Button`
    width: 20px;
    height: 20px;
@@ -49,11 +55,16 @@ const SText = styled.Text`
    color: white;
 `;
 
-const PageLayoutComponent = ({ children, title }: IPageLayoutComponent) => {
+const PageLayoutComponent = ({ children, title, HeaderRight }: IPageLayoutComponent) => {
    const { logout } = useLogout();
    return (
       <Container>
          <LogoWrapper>
+            {HeaderRight && (
+               <RightWrapper>
+                  <HeaderRight />
+               </RightWrapper>
+            )}
             {!_.isEmpty(title) ? (
                <>
                   <SText>{title}</SText>

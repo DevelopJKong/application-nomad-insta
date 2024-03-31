@@ -7,6 +7,7 @@ import Notifications from '../screens/login/notifications-screen';
 import Me from '../screens/login/me-screen';
 import Likes from '../screens/login/likes-screen';
 import Comments from '../screens/login/comments-screen';
+import MessageNav from './message-nav';
 
 interface ILoggedInStackNav {
    screenName?: string;
@@ -23,6 +24,7 @@ type RootStackParamList = {
    };
    Likes: undefined;
    Comments: undefined;
+   Messages: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -43,6 +45,13 @@ const LoggedInStackNav = ({ screenName }: ILoggedInStackNav) => {
          <Stack.Screen name={'Photo'} component={Photo} />
          <Stack.Screen name={'Likes'} component={Likes} />
          <Stack.Screen name={'Comments'} component={Comments} />
+         <Stack.Screen
+            options={{
+               headerShown: false,
+            }}
+            name={'Messages'}
+            component={MessageNav}
+         />
       </Stack.Navigator>
    );
 };
