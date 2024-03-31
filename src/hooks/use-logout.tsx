@@ -1,7 +1,7 @@
 import { logUserIn } from '../apollo';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LOGIN_KEY } from '../common/constants/global.constant';
+import { LOGIN_KEY } from '../common/constants/global-constant';
 
 const useLogout = () => {
    const logout = async () => {

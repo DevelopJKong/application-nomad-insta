@@ -3,7 +3,7 @@ import { useReactiveVar, ApolloProvider } from '@apollo/client';
 import client, { isLoggedInVar, cache } from './src/apollo';
 import LoggedOutNav from './src/navigators/logged-out-nav.navigator';
 import LoggedInTabNav from './src/navigators/logged-in-tab-nav.navigator';
-import LoggedInStackNav from './src/navigators/logged-in-stack-nav.navigator';
+import LoggedInStackNav from './src/navigators/logged-in-stack-nav';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'react-native';
 import { AsyncStorageWrapper, CachePersistor } from 'apollo3-cache-persist';

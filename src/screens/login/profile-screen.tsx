@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import styled from 'styled-components/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import TitleLayoutComponent from '../../components/layout/title-layout.component';
+import TitleLayoutComponent from '../../components/layout/title-layout';
 
 const Container = styled.View`
    background-color: black;

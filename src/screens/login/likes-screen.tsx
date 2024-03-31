@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import PageLayoutComponent from '../../components/layout/page-layout.component';
+import PageLayoutComponent from '../../components/layout/page-layout';
 import { USER_FRAGMENT } from '../../fragments';
 import { gql, useQuery } from '@apollo/client';
-import UserRowComponent from '../../components/user/user-row.component';
-import ScreenLayoutComponent from '../../components/layout/screen-layout.component';
+import UserRowComponent from '../../components/user/user-row';
+import ScreenLayoutComponent from '../../components/layout/screen-layout';
 import { FlatList, View } from 'react-native';
 
 const LIKES_QUERY = gql`

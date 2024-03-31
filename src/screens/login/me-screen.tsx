@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
-import PageLayoutComponent from '../../components/layout/page-layout.component';
-import useMe from '../../hooks/use-me.hook';
+import PageLayoutComponent from '../../components/layout/page-layout';
+import useMe from '../../hooks/use-me';
 
 const Container = styled.View`
    background-color: black;

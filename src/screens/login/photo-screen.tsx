@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { PHOTO_FRAGMENT } from '../../fragments';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import PhotoComponent from '../../components/photo/photo.component';
-import ScreenLayoutComponent from '../../components/layout/screen-layout.component';
+import PhotoComponent from '../../components/photo/photo';
+import ScreenLayoutComponent from '../../components/layout/screen-layout';
 import { RefreshControl } from 'react-native';
 
 const SEE_PHOTO_QUERY = gql`

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from '../../fragments';
 import { FlatList } from 'react-native';
-import PageLayoutComponent from '../../components/layout/page-layout.component';
-import ScreenLayoutComponent from '../../components/layout/screen-layout.component';
-import PhotoComponent from '../../components/photo/photo.component';
+import PageLayoutComponent from '../../components/layout/page-layout';
+import ScreenLayoutComponent from '../../components/layout/screen-layout';
+import PhotoComponent from '../../components/photo/photo';
 import * as _ from 'lodash';
 
 const SEE_FEED_QUERY = gql`

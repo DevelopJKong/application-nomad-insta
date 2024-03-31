@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Ionicons } from '@expo/vector-icons';
 import { ApolloCache, FetchResult, gql, useMutation } from '@apollo/client';
-import { BACKEND_URL } from '../../common/constants/global.constant';
+import { BACKEND_URL } from '../../common/constants/global-constant';
 import { toggleLike, toggleLikeVariables } from '../../__generated__/toggleLike';
 
 interface IPhotoComponent {

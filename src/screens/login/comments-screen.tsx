@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PageLayoutComponent from '../../components/layout/page-layout.component';
+import PageLayoutComponent from '../../components/layout/page-layout';
 import styled from 'styled-components/native';
 const Container = styled.View`
    background-color: black;

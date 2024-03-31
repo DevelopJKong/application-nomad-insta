@@ -1,6 +1,6 @@
-import AuthLayout from '../../components/auth/auth-layout.component';
-import { Input } from '../../components/auth/auth-shared.component';
-import AuthButton from '../../components/auth/auth-button.component';
+import AuthLayout from '../../components/auth/auth-layout';
+import { Input } from '../../components/auth/auth-shared';
+import AuthButton from '../../components/auth/auth-button';
 import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components/native';

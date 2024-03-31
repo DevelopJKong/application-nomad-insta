@@ -1,12 +1,12 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Profile from '../screens/login/profile.screen';
-import Photo from '../screens/login/photo.screen';
-import Feed from '../screens/login/feed.screen';
-import Search from '../screens/login/search.screen';
-import Notifications from '../screens/login/notifications.screen';
-import Me from '../screens/login/me.screen';
-import Likes from '../screens/login/likes.screen';
-import Comments from '../screens/login/comments.screen';
+import Profile from '../screens/login/profile-screen';
+import Photo from '../screens/login/photo-screen';
+import Feed from '../screens/login/feed-screen';
+import Search from '../screens/login/search-screen';
+import Notifications from '../screens/login/notifications-screen';
+import Me from '../screens/login/me-screen';
+import Likes from '../screens/login/likes-screen';
+import Comments from '../screens/login/comments-screen';
 
 interface ILoggedInStackNav {
    screenName?: string;

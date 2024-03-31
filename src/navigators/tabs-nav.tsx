@@ -1,10 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Search from '../screens/login/search.screen';
+import Search from '../screens/login/search-screen';
 import { Image, View } from 'react-native';
-import TabIcon from '../components/nav/tab-icon.component';
-import LoggedInStackNav from './logged-in-stack-nav.navigator';
-import useMe from '../hooks/use-me.hook';
+import TabIcon from '../components/nav/tab-icon';
+import LoggedInStackNav from './logged-in-stack-nav';
+import useMe from '../hooks/use-me';
 import * as _ from 'lodash';
 
 const Tabs = createBottomTabNavigator();

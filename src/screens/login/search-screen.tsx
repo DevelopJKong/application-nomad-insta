@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components/native';
-import PageLayoutComponent from '../../components/layout/page-layout.component';
-import DismissKeyBoardComponent from '../../components/dismiss-key-board.component';
+import PageLayoutComponent from '../../components/layout/page-layout';
+import DismissKeyBoardComponent from '../../components/dismiss-key-board';
 import { useForm } from 'react-hook-form';
 import { EvilIcons } from '@expo/vector-icons';
 import { gql, useLazyQuery } from '@apollo/client';
 import { ActivityIndicator, FlatList, Image, TouchableOpacity, useWindowDimensions } from 'react-native';
 import * as _ from 'lodash';
-import { BACKEND_URL } from '../../common/constants/global.constant';
+import { BACKEND_URL } from '../../common/constants/global-constant';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 

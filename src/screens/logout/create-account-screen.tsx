@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import { gql, useMutation } from '@apollo/client';
-import AuthLayout from '../../components/auth/auth-layout.component';
-import AuthButton from '../../components/auth/auth-button.component';
+import AuthLayout from '../../components/auth/auth-layout';
+import AuthButton from '../../components/auth/auth-button';
 import styled from 'styled-components/native';
-import { Input } from '../../components/auth/auth-shared.component';
+import { Input } from '../../components/auth/auth-shared';
 import { useForm } from 'react-hook-form';
 import { createUserMutation, createUserMutationVariables } from '../../__generated__/createUserMutation';
 

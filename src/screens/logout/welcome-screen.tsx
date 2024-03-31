@@ -2,15 +2,15 @@ import React, { useLayoutEffect } from 'react';
 import styled from 'styled-components/native';
 import { TouchableOpacity } from 'react-native';
 import { colors } from '../../styled';
-import AuthLayout from '../../components/auth/auth-layout.component';
-import AuthButton from '../../components/auth/auth-button.component';
+import AuthLayout from '../../components/auth/auth-layout';
+import AuthButton from '../../components/auth/auth-button';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { logUserIn } from '../../apollo';
 import { loginMutation, loginMutationVariables } from '../../__generated__/loginMutation';
-import { LOGIN_MUTATION } from './login.screen';
+import { LOGIN_MUTATION } from './login-screen';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LOGIN_KEY } from '../../common/constants/global.constant';
+import { LOGIN_KEY } from '../../common/constants/global-constant';
 
 const LoginLink = styled.Text`
    color: ${colors.blue};
