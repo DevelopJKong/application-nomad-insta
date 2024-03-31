@@ -1,9 +1,10 @@
 import { Photo, SeeFeedOutput } from './gql/graphql';
-import { ApolloClient, createHttpLink, InMemoryCache, makeVar } from '@apollo/client';
+import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import _ from 'lodash';
+import { createUploadLink } from 'apollo-upload-client';
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar('');
@@ -17,8 +18,12 @@ export const logUserIn = async (token: string, success: 'yes' | 'no') => {
    tokenVar(success === 'yes' ? token.replace(/"/g, '') : '');
 };
 
-const httpLink = createHttpLink({
-   uri: `http://172.30.1.6:8000/graphql`,
+// const httpLink = createHttpLink({
+//    uri: `http://172.30.1.6:8000/graphql`,
+// });
+
+const uploadHttpLink = createUploadLink({
+   uri: 'http://172.30.1.6:8000/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
@@ -66,7 +71,7 @@ export const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-   link: authLink.concat(onErrorLink).concat(httpLink),
+   link: authLink.concat(onErrorLink).concat(uploadHttpLink),
    cache,
 });
 export default client;

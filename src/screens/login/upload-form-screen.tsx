@@ -48,7 +48,28 @@ const UploadForm = ({ route, navigation }: any) => {
    const { register, handleSubmit, setValue } = useForm<any>();
 
    // ! graphql 모음
-   const [uploadPhotoMutation, { loading }] = useMutation(UPLOAD_PHOTO_MUTATION);
+   const updateUploadPhoto = (cache: any, result: any) => {
+      const {
+         data: { uploadPhoto },
+      } = result;
+
+      if (uploadPhoto?.id) {
+         cache.modify({
+            id: `ROOT_QUERY`,
+            fields: {
+               seeFeed(prev: any) {
+                  return [uploadPhoto, ...prev];
+               },
+            },
+         });
+
+         navigation.navigate('Tabs');
+      }
+   };
+
+   const [uploadPhotoMutation, { loading }] = useMutation(UPLOAD_PHOTO_MUTATION, {
+      update: updateUploadPhoto,
+   });
 
    // ! 컴포넌트 모음
 
@@ -82,7 +103,7 @@ const UploadForm = ({ route, navigation }: any) => {
       uploadPhotoMutation({
          variables: {
             caption,
-            file: route.params.file,
+            file,
          },
       });
    };
