@@ -19,11 +19,22 @@ export const logUserIn = async (token: string, success: 'yes' | 'no') => {
 };
 
 // const httpLink = createHttpLink({
-//    uri: `http://172.30.1.6:8000/graphql`,
+//    uri: `http://localhost:8000/graphql`,
 // });
+
+const customFetch = async (uri: any, options: any) => {
+   return await fetch(uri, options).then((response) => {
+      if (response.status >= 500) {
+         // or handle 400 errors
+         return Promise.reject(response.status);
+      }
+      return response;
+   });
+};
 
 const uploadHttpLink = createUploadLink({
    uri: 'http://172.30.1.6:8000/graphql',
+   fetch: customFetch,
 });
 
 const authLink = setContext((_, { headers }) => {

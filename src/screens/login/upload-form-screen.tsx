@@ -1,12 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components/native';
 import DismissKeyBoard from '../../components/dismiss-key-board';
 import { useForm } from 'react-hook-form';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import { colors } from '../../styled';
 import { gql, useMutation } from '@apollo/client';
-import { FEED_PHOTO_FRAGMENT } from '../../fragments';
 import { ReactNativeFile } from 'apollo-upload-client';
+import { AntDesign } from '@expo/vector-icons';
+import * as mime from 'react-native-mime-types';
+
+function generateRNFile(uri: string, name: string) {
+   return uri
+      ? new ReactNativeFile({
+           uri,
+           type: mime.lookup(uri) || 'image',
+           name,
+        })
+      : null;
+}
 
 const UPLOAD_PHOTO_MUTATION = gql`
    mutation uploadPhoto($file: Upload!, $caption: String) {
@@ -16,7 +27,6 @@ const UPLOAD_PHOTO_MUTATION = gql`
          message
       }
    }
-   ${FEED_PHOTO_FRAGMENT}
 `;
 
 const Container = styled.View`
@@ -44,8 +54,10 @@ const HeaderRightText = styled.Text`
 `;
 
 const UploadForm = ({ route, navigation }: any) => {
+   console.log(route.params.file);
+
    // ! react-hook-form 모음
-   const { register, handleSubmit, setValue } = useForm<any>();
+   const { register, handleSubmit, setValue, watch } = useForm<any>();
 
    // ! graphql 모음
    const updateUploadPhoto = (cache: any, result: any) => {
@@ -53,17 +65,24 @@ const UploadForm = ({ route, navigation }: any) => {
          data: { uploadPhoto },
       } = result;
 
-      if (uploadPhoto?.id) {
+      console.log(uploadPhoto?.ok);
+
+      if (uploadPhoto?.ok) {
          cache.modify({
             id: `ROOT_QUERY`,
             fields: {
                seeFeed(prev: any) {
-                  return [uploadPhoto, ...prev];
+                  return {
+                     ...prev,
+                     photos: [...prev.photos, uploadPhoto],
+                  };
                },
             },
          });
 
-         navigation.navigate('Tabs');
+         navigation.navigate('Tabs', {
+            screen: 'TabsFeed',
+         });
       }
    };
 
@@ -83,28 +102,30 @@ const UploadForm = ({ route, navigation }: any) => {
       />
    );
 
-   const HeaderRight = () => (
-      <TouchableOpacity
-         onPress={() => {
-            handleSubmit(onValid)();
-         }}
-      >
-         <HeaderRightText>Next</HeaderRightText>
-      </TouchableOpacity>
+   const HeaderRight = useCallback(
+      () => (
+         <TouchableOpacity
+            onPress={async () => {
+               await onValid(watch());
+            }}
+         >
+            <HeaderRightText>Next</HeaderRightText>
+         </TouchableOpacity>
+      ),
+      [watch()],
    );
 
-   const onValid = ({ caption }: any) => {
-      const file = new ReactNativeFile({
-         uri: route.params.file,
-         name: 'image.jpg',
-         type: 'image/jpeg',
-      });
+   const onValid = async ({ caption }: { caption: string }) => {
+      console.log(route.params.file);
+      const file = generateRNFile(route.params.file, `${Date.now()}.jpg`);
 
-      uploadPhotoMutation({
+      await uploadPhotoMutation({
          variables: {
             caption,
             file,
          },
+      }).catch((error) => {
+         console.log(JSON.stringify(error, null, 4));
       });
    };
 
@@ -115,7 +136,13 @@ const UploadForm = ({ route, navigation }: any) => {
    useEffect(() => {
       navigation.setOptions({
          headerRight: loading ? HeaderRightLoading : HeaderRight,
-         ...(loading && { headerLeft: () => null }),
+         headerLeft: loading
+            ? () => null
+            : () => (
+                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 5 }}>
+                    <AntDesign name='arrowleft' size={24} color='white' />
+                 </TouchableOpacity>
+              ),
       });
    }, [loading]);
 

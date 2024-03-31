@@ -23,7 +23,7 @@ const documents = {
     "\n   query seeLikes($seeLikesInput: SeeLikesInput!) {\n      seeLikes(input: $seeLikesInput) {\n         user {\n            ...UserFragment\n         }\n      }\n   }\n   \n": types.SeeLikesDocument,
     "\n   query seePhoto($seePhotoInput: SeePhotoInput!) {\n      seePhoto(input: $seePhotoInput) {\n         ok\n         message\n         error\n         photo {\n            ...PhotoFragment\n            user {\n               username\n               avatar\n            }\n            caption\n            createdAt\n            isMine\n         }\n      }\n   }\n   \n": types.SeePhotoDocument,
     "\n   query searchPhotos($input: SearchPhotosInput!) {\n      searchPhotos(input: $input) {\n         ok\n         error\n         message\n         photos {\n            id\n            file\n         }\n      }\n   }\n": types.SearchPhotosDocument,
-    "\n   mutation uploadPhoto($file: Upload!, $caption: String) {\n      uploadPhoto(input: { photoFile: $file, caption: $caption }) {\n         ok\n         error\n         message\n      }\n   }\n   \n": types.UploadPhotoDocument,
+    "\n   mutation uploadPhoto($file: Upload!, $caption: String) {\n      uploadPhoto(input: { photoFile: $file, caption: $caption }) {\n         ok\n         error\n         message\n      }\n   }\n": types.UploadPhotoDocument,
     "\n   mutation createUserMutation($createUserInput: CreateUserInput!) {\n      createUser(input: $createUserInput) {\n         ok\n         error\n      }\n   }\n": types.CreateUserMutationDocument,
     "\n   mutation loginMutation($loginInput: LoginInput!) {\n      login(input: $loginInput) {\n         ok\n         error\n         token\n      }\n   }\n": types.LoginMutationDocument,
     "\n      query healthCheck {\n         hi {\n            ok\n         }\n      }\n   ": types.HealthCheckDocument,
@@ -86,7 +86,7 @@ export function graphql(source: "\n   query searchPhotos($input: SearchPhotosInp
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n   mutation uploadPhoto($file: Upload!, $caption: String) {\n      uploadPhoto(input: { photoFile: $file, caption: $caption }) {\n         ok\n         error\n         message\n      }\n   }\n   \n"): (typeof documents)["\n   mutation uploadPhoto($file: Upload!, $caption: String) {\n      uploadPhoto(input: { photoFile: $file, caption: $caption }) {\n         ok\n         error\n         message\n      }\n   }\n   \n"];
+export function graphql(source: "\n   mutation uploadPhoto($file: Upload!, $caption: String) {\n      uploadPhoto(input: { photoFile: $file, caption: $caption }) {\n         ok\n         error\n         message\n      }\n   }\n"): (typeof documents)["\n   mutation uploadPhoto($file: Upload!, $caption: String) {\n      uploadPhoto(input: { photoFile: $file, caption: $caption }) {\n         ok\n         error\n         message\n      }\n   }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
