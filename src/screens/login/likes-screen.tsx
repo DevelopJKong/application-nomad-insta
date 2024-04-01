@@ -3,7 +3,7 @@ import PageLayoutComponent from '../../components/layout/page-layout';
 import { USER_FRAGMENT } from '../../fragments';
 import { gql, useQuery } from '@apollo/client';
 import UserRowComponent from '../../components/user/user-row';
-import ScreenLayoutComponent from '../../components/layout/screen-layout';
+import ScreenLayout from '../../components/layout/screen-layout';
 import { FlatList, View } from 'react-native';
 
 const LIKES_QUERY = gql`
@@ -38,7 +38,7 @@ const Likes = ({ route }: any) => {
 
    return (
       <PageLayoutComponent>
-         <ScreenLayoutComponent loading={loading}>
+         <ScreenLayout loading={loading}>
             <FlatList
                ItemSeparatorComponent={() => (
                   <View
@@ -56,7 +56,7 @@ const Likes = ({ route }: any) => {
                renderItem={renderUser}
                style={{ width: '100%' }}
             />
-         </ScreenLayoutComponent>
+         </ScreenLayout>
       </PageLayoutComponent>
    );
 };

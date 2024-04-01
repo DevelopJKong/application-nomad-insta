@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import { PHOTO_FRAGMENT } from '../../fragments';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import PhotoComponent from '../../components/photo/photo';
-import ScreenLayoutComponent from '../../components/layout/screen-layout';
+import ScreenLayout from '../../components/layout/screen-layout';
 import { RefreshControl } from 'react-native';
 
 const SEE_PHOTO_QUERY = gql`
@@ -68,11 +68,11 @@ const Photo = ({ route }: NavigationType) => {
       setRefreshing(false);
    };
    return (
-      <ScreenLayoutComponent loading={loading}>
+      <ScreenLayout loading={loading}>
          <Container refreshControl={<RefreshControl onRefresh={onRefresh} refreshing={refreshing} />}>
             <PhotoComponent {...data?.seePhoto?.photo} fullView={true} />
          </Container>
-      </ScreenLayoutComponent>
+      </ScreenLayout>
    );
 };
 

@@ -14,8 +14,8 @@ const Container = styled.View`
    justify-content: center;
 `;
 
-const ScreenLayoutComponent = ({ loading, children }: IScreenLayoutComponent) => {
+const ScreenLayout = ({ loading, children }: IScreenLayoutComponent) => {
    return <Container>{loading ? <ActivityIndicator color='white' /> : children}</Container>;
 };
 
-export default ScreenLayoutComponent;
+export default ScreenLayout;

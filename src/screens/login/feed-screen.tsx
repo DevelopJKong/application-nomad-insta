@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { COMMENT_FRAGMENT, PHOTO_FRAGMENT } from '../../fragments';
 import { FlatList, TouchableOpacity } from 'react-native';
 import PageLayoutComponent from '../../components/layout/page-layout';
-import ScreenLayoutComponent from '../../components/layout/screen-layout';
+import ScreenLayout from '../../components/layout/screen-layout';
 import PhotoComponent from '../../components/photo/photo';
 import _ from 'lodash';
 import { Ionicons } from '@expo/vector-icons';
@@ -69,7 +69,7 @@ const Feed = ({ navigation }: any) => {
 
    return (
       <PageLayoutComponent HeaderRight={MessageButton}>
-         <ScreenLayoutComponent loading={loading}>
+         <ScreenLayout loading={loading}>
             <FlatList
                onEndReachedThreshold={0.7}
                onEndReached={() => {
@@ -91,7 +91,7 @@ const Feed = ({ navigation }: any) => {
                keyExtractor={(photo) => String(photo.id)}
                renderItem={renderPhoto}
             />
-         </ScreenLayoutComponent>
+         </ScreenLayout>
       </PageLayoutComponent>
    );
 };

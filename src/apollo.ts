@@ -33,7 +33,7 @@ const customFetch = async (uri: any, options: any) => {
 };
 
 const uploadHttpLink = createUploadLink({
-   uri: 'http://172.30.1.6:8000/graphql',
+   uri: 'http://172.30.1.24:8000/graphql',
    fetch: customFetch,
 });
 
