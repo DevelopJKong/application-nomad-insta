@@ -18,7 +18,13 @@ const MessageNav = () => {
             headerLeft: ({ tintColor }) => <Ionicons color={tintColor} name='chevron-down' size={28} />,
          }}
       >
-         <Stack.Screen name='Rooms' component={RoomsScreen} />
+         <Stack.Screen
+            name='Rooms'
+            component={RoomsScreen}
+            options={{
+               headerLeft: ({ tintColor }) => <Ionicons color={tintColor} name='chevron-down' size={30} />,
+            }}
+         />
          <Stack.Screen name='Room' component={RoomScreen} />
       </Stack.Navigator>
    );
