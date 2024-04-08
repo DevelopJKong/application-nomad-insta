@@ -18,11 +18,12 @@ const documents = {
     "\n   fragment CommentFragment on Comment {\n      id\n      user {\n         username\n         avatar\n      }\n      payload\n      isMine\n      createdAt\n   }\n": types.CommentFragmentFragmentDoc,
     "\n   fragment UserFragment on User {\n      id\n      username\n      avatar\n      isFollowing\n      isMe\n   }\n": types.UserFragmentFragmentDoc,
     "\n   fragment FeedPhotoFragment on Photo {\n      ...PhotoFragment\n      user {\n         id\n         username\n         avatar\n      }\n      caption\n      createdAt\n      isMine\n   }\n   \n": types.FeedPhotoFragmentFragmentDoc,
-    "\n   fragment RoomParts on Room {\n      id\n      unreadTotal\n      users {\n         avatar\n         username\n      }\n   }\n": types.RoomPartsFragmentDoc,
+    "\n   fragment RoomParts on Room {\n      id\n      unreadTotal\n      users {\n         id\n         avatar\n         username\n      }\n   }\n": types.RoomPartsFragmentDoc,
     "\n   query me {\n      me {\n         user {\n            id\n            username\n            avatar\n         }\n      }\n   }\n": types.MeDocument,
     "\n   query seeFeed($seeFeedInput: SeeFeedInput!) {\n      seeFeed(input: $seeFeedInput) {\n         ok\n         message\n         error\n         photos {\n            ...PhotoFragment\n            user {\n               username\n               avatar\n            }\n            caption\n            createdAt\n            isMine\n            comments {\n               ...CommentFragment\n            }\n         }\n      }\n   }\n   \n   \n": types.SeeFeedDocument,
     "\n   query seeLikes($seeLikesInput: SeeLikesInput!) {\n      seeLikes(input: $seeLikesInput) {\n         user {\n            ...UserFragment\n         }\n      }\n   }\n   \n": types.SeeLikesDocument,
     "\n   query seePhoto($seePhotoInput: SeePhotoInput!) {\n      seePhoto(input: $seePhotoInput) {\n         ok\n         message\n         error\n         photo {\n            ...PhotoFragment\n            user {\n               username\n               avatar\n            }\n            caption\n            createdAt\n            isMine\n         }\n      }\n   }\n   \n": types.SeePhotoDocument,
+    "\n   mutation sendMessage($payload: String!, $roomId: Float, $userId: Float) {\n      sendMessage(input: { payload: $payload, roomId: $roomId, userId: $userId }) {\n         ok\n         error\n         message\n      }\n   }\n": types.SendMessageDocument,
     "\n   query seeRoom($id: Float!) {\n      seeRoom(input: { id: $id }) {\n         ok\n         error\n         message\n         room {\n            messages {\n               id\n               payload\n               user {\n                  username\n                  avatar\n               }\n               read\n            }\n         }\n      }\n   }\n": types.SeeRoomDocument,
     "\n   query seeRooms {\n      seeRooms {\n         ok\n         message\n         error\n         rooms {\n            ...RoomParts\n         }\n      }\n   }\n   \n": types.SeeRoomsDocument,
     "\n   query searchPhotos($input: SearchPhotosInput!) {\n      searchPhotos(input: $input) {\n         ok\n         error\n         message\n         photos {\n            id\n            file\n         }\n      }\n   }\n": types.SearchPhotosDocument,
@@ -69,7 +70,7 @@ export function graphql(source: "\n   fragment FeedPhotoFragment on Photo {\n   
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n   fragment RoomParts on Room {\n      id\n      unreadTotal\n      users {\n         avatar\n         username\n      }\n   }\n"): (typeof documents)["\n   fragment RoomParts on Room {\n      id\n      unreadTotal\n      users {\n         avatar\n         username\n      }\n   }\n"];
+export function graphql(source: "\n   fragment RoomParts on Room {\n      id\n      unreadTotal\n      users {\n         id\n         avatar\n         username\n      }\n   }\n"): (typeof documents)["\n   fragment RoomParts on Room {\n      id\n      unreadTotal\n      users {\n         id\n         avatar\n         username\n      }\n   }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -86,6 +87,10 @@ export function graphql(source: "\n   query seeLikes($seeLikesInput: SeeLikesInp
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n   query seePhoto($seePhotoInput: SeePhotoInput!) {\n      seePhoto(input: $seePhotoInput) {\n         ok\n         message\n         error\n         photo {\n            ...PhotoFragment\n            user {\n               username\n               avatar\n            }\n            caption\n            createdAt\n            isMine\n         }\n      }\n   }\n   \n"): (typeof documents)["\n   query seePhoto($seePhotoInput: SeePhotoInput!) {\n      seePhoto(input: $seePhotoInput) {\n         ok\n         message\n         error\n         photo {\n            ...PhotoFragment\n            user {\n               username\n               avatar\n            }\n            caption\n            createdAt\n            isMine\n         }\n      }\n   }\n   \n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n   mutation sendMessage($payload: String!, $roomId: Float, $userId: Float) {\n      sendMessage(input: { payload: $payload, roomId: $roomId, userId: $userId }) {\n         ok\n         error\n         message\n      }\n   }\n"): (typeof documents)["\n   mutation sendMessage($payload: String!, $roomId: Float, $userId: Float) {\n      sendMessage(input: { payload: $payload, roomId: $roomId, userId: $userId }) {\n         ok\n         error\n         message\n      }\n   }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

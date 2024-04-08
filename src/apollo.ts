@@ -5,6 +5,7 @@ import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import _ from 'lodash';
 import { createUploadLink } from 'apollo-upload-client';
+import { BACKEND_URL } from './common/constants/global-constant';
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar('');
@@ -33,7 +34,7 @@ const customFetch = async (uri: any, options: any) => {
 };
 
 const uploadHttpLink = createUploadLink({
-   uri: 'http://172.30.1.54:8000/graphql',
+   uri: `http://${BACKEND_URL}:8000/graphql`,
    fetch: customFetch,
 });
 

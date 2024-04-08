@@ -1,2 +1,2 @@
 export const LOGIN_KEY = 'loginAtom';
-export const BACKEND_URL = 'http://172.30.1.54';
+export const BACKEND_URL = '172.30.1.75';

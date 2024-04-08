@@ -4,6 +4,20 @@ import { FlatList, KeyboardAvoidingView, View } from 'react-native';
 import ScreenLayout from '../../components/layout/screen-layout';
 import styled from 'styled-components/native';
 
+type TMessageContainer = {
+   $outGoing: boolean;
+};
+
+const SEND_MESSAGE_MUTATION = gql`
+   mutation sendMessage($payload: String!, $roomId: Float, $userId: Float) {
+      sendMessage(input: { payload: $payload, roomId: $roomId, userId: $userId }) {
+         ok
+         error
+         message
+      }
+   }
+`;
+
 const ROOM_QUERY = gql`
    query seeRoom($id: Float!) {
       seeRoom(input: { id: $id }) {
@@ -25,26 +39,40 @@ const ROOM_QUERY = gql`
    }
 `;
 
-const MessageContainer = styled.View``;
+const MessageContainer = styled.View<TMessageContainer>`
+   padding: 0 10px;
+   flex-direction: ${(props) => (props.$outGoing ? 'row-reverse' : 'row')};
+   align-items: end;
+`;
 
-const Author = styled.View``;
+const Author = styled.View`
+   margin-right: 10px;
+`;
 
-const Avatar = styled.Image``;
-
-const Username = styled.Text`
-   color: white;
+const Avatar = styled.Image`
+   height: 20px;
+   width: 20px;
+   border-radius: 10px;
 `;
 
 const Message = styled.Text`
+   background-color: rgba(255, 255, 255, 0.3);
    color: white;
+   padding: 5px 10px;
+   overflow: hidden;
+   border-radius: 10px;
+   font-size: 16px;
+   margin: 0 16px;
 `;
 
 const TextInput = styled.TextInput`
    margin-bottom: 50px;
+   margin-top: 25px;
    width: 95%;
-   background-color: white;
+   border: 1px solid rgba(255, 255, 255, 0.5);
    padding: 10px 20px;
    border-radius: 9999px;
+   color: white;
    margin: 0 10px;
 `;
 
@@ -58,10 +86,9 @@ const RoomScreen = ({ route, navigation }: any) => {
    // ! 기본 함수 모음
    const renderItem = ({ item: message }: any) => {
       return (
-         <MessageContainer>
+         <MessageContainer $outGoing={message.user.username === route?.params?.talkingTo}>
             <Author>
                <Avatar source={{ uri: message?.user?.avatar }} />
-               <Username>{message?.user?.username}</Username>
             </Author>
             <Message>{message?.payload}</Message>
          </MessageContainer>
