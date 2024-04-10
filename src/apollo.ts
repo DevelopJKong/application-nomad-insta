@@ -39,9 +39,9 @@ const wsLink = new WebSocketLink({
    uri: `ws://${BACKEND_URL}:8000/graphql`,
    options: {
       reconnect: true,
-      connectionParams: {
+      connectionParams: () => ({
          'x-jwt': tokenVar() || '',
-      },
+      }),
    },
 });
 

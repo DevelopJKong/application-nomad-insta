@@ -1,5 +1,5 @@
-import { ApolloCache, FetchResult, gql, useMutation, useQuery } from '@apollo/client';
-import React, { useEffect } from 'react';
+import { ApolloCache, FetchResult, gql, useApolloClient, useMutation, useQuery, useSubscription } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
 import { FlatList, KeyboardAvoidingView, View } from 'react-native';
 import ScreenLayout from '../../components/layout/screen-layout';
 import styled from 'styled-components/native';
@@ -16,6 +16,20 @@ type TMessageContainer = {
 type TForm = {
    message: string;
 };
+
+const ROOM_UPDATES = gql`
+   subscription roomUpdates($id: Float!) {
+      roomUpdates(input: { id: $id }) {
+         id
+         payload
+         user {
+            username
+            avatar
+         }
+         read
+      }
+   }
+`;
 
 const SEND_MESSAGE_MUTATION = gql`
    mutation sendMessage($payload: String!, $roomId: Float, $userId: Float) {
@@ -99,9 +113,17 @@ const InputContainer = styled.View`
 const SendButton = styled.TouchableOpacity``;
 
 const RoomScreen = ({ route, navigation }: any) => {
+   const [subscribed, setSubscribed] = useState(false);
    const { data: meData } = useMe();
 
+   const client = useApolloClient();
    const { register, setValue, handleSubmit, getValues, watch } = useForm<TForm>();
+
+   useSubscription(ROOM_UPDATES, {
+      variables: {
+         id: route?.params?.roomId,
+      },
+   });
 
    const updateSendMessage = async (
       cache: ApolloCache<any>,
@@ -129,7 +151,7 @@ const RoomScreen = ({ route, navigation }: any) => {
             read: true,
             __typename: 'Message',
          };
-         const messageFragment = cache.writeFragment({
+         const incomingMessage = cache.writeFragment({
             fragment: gql`
                fragment NewMessage on Message {
                   id
@@ -145,16 +167,12 @@ const RoomScreen = ({ route, navigation }: any) => {
          });
 
          cache.modify({
-            id: `ROOT_QUERY`,
+            id: `Room:${route?.params?.roomId}`,
             fields: {
-               seeRoom(prev) {
-                  return {
-                     ...prev,
-                     room: {
-                        ...prev.room,
-                        messages: [...prev.room.messages, messageFragment],
-                     },
-                  };
+               messages(prev: any) {
+                  const existingMessage = prev.find((a: any) => a.__ref === incomingMessage?.__ref);
+                  if (existingMessage) return prev;
+                  return [...prev, incomingMessage];
                },
             },
          });
@@ -166,7 +184,7 @@ const RoomScreen = ({ route, navigation }: any) => {
       update: updateSendMessage,
    });
 
-   const { data, loading } = useQuery(ROOM_QUERY, {
+   const { data, loading, subscribeToMore } = useQuery(ROOM_QUERY, {
       variables: {
          id: route?.params?.roomId,
       },
@@ -174,8 +192,6 @@ const RoomScreen = ({ route, navigation }: any) => {
 
    // ! 기본 함수 모음
    const renderItem = ({ item: message }: any) => {
-      console.log('route?.params?.talkingTo?.username', route?.params?.talkingTo?.username);
-      console.log('message?.user?.username', message?.user);
       return (
          <MessageContainer $outGoing={message?.user?.username !== route?.params?.talkingTo?.username}>
             <Author>
@@ -198,6 +214,61 @@ const RoomScreen = ({ route, navigation }: any) => {
       }
    };
 
+   const updateQuery = (
+      prev: any,
+      {
+         subscriptionData,
+      }: {
+         subscriptionData: { data: any };
+      },
+   ) => {
+      console.log(JSON.stringify(subscriptionData, null, 4));
+      const sameIdMessage = prev.seeRoom.room.messages.find((a: any) => a.id === subscriptionData.data.roomUpdates.id);
+      if (!subscriptionData.data) return prev;
+      if (sameIdMessage) return prev;
+
+      const messageObj = {
+         id: subscriptionData?.data?.roomUpdates?.id,
+         payload: subscriptionData?.data?.roomUpdates?.payload,
+         user: {
+            username: subscriptionData?.data?.roomUpdates?.user?.username ?? '',
+            avatar: subscriptionData?.data?.roomUpdates?.user?.avatar ?? '',
+         },
+         read: subscriptionData?.data?.roomUpdates?.read,
+         __typename: 'Message',
+      };
+
+      const messageFragment = client.cache.writeFragment({
+         fragment: gql`
+            fragment NewMessage on Message {
+               id
+               payload
+               user {
+                  username
+                  avatar
+               }
+               read
+            }
+         `,
+         data: messageObj,
+      });
+
+      client.cache.modify({
+         id: `ROOT_QUERY`,
+         fields: {
+            seeRoom(prev) {
+               return {
+                  ...prev,
+                  room: {
+                     ...prev.room,
+                     messages: [...prev.room.messages, messageFragment],
+                  },
+               };
+            },
+         },
+      });
+   };
+
    // ! useEffect 모음
    useEffect(() => {
       navigation.setOptions({
@@ -208,6 +279,19 @@ const RoomScreen = ({ route, navigation }: any) => {
    useEffect(() => {
       register('message', { required: true });
    }, [register]);
+
+   useEffect(() => {
+      if (data?.seeRoom) {
+         subscribeToMore({
+            document: ROOM_UPDATES,
+            variables: {
+               id: route?.params?.roomId,
+            },
+            updateQuery: updateQuery,
+         });
+         setSubscribed(true);
+      }
+   }, [data, subscribed]);
    return (
       <KeyboardAvoidingView
          style={{ flex: 1, backgroundColor: 'black' }}
@@ -218,7 +302,7 @@ const RoomScreen = ({ route, navigation }: any) => {
             <FlatList
                style={{ width: '100%', marginVertical: 10 }}
                inverted
-               data={cloneDeep(data?.seeRoom.room?.messages).reverse()}
+               data={cloneDeep(data?.seeRoom.room?.messages ?? [])?.reverse()}
                keyExtractor={(message, index) => `${(message as any)?.id}-${index}`}
                renderItem={renderItem}
                showsVerticalScrollIndicator={false}

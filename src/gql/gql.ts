@@ -23,9 +23,11 @@ const documents = {
     "\n   query seeFeed($seeFeedInput: SeeFeedInput!) {\n      seeFeed(input: $seeFeedInput) {\n         ok\n         message\n         error\n         photos {\n            ...PhotoFragment\n            user {\n               username\n               avatar\n            }\n            caption\n            createdAt\n            isMine\n            comments {\n               ...CommentFragment\n            }\n         }\n      }\n   }\n   \n   \n": types.SeeFeedDocument,
     "\n   query seeLikes($seeLikesInput: SeeLikesInput!) {\n      seeLikes(input: $seeLikesInput) {\n         user {\n            ...UserFragment\n         }\n      }\n   }\n   \n": types.SeeLikesDocument,
     "\n   query seePhoto($seePhotoInput: SeePhotoInput!) {\n      seePhoto(input: $seePhotoInput) {\n         ok\n         message\n         error\n         photo {\n            ...PhotoFragment\n            user {\n               username\n               avatar\n            }\n            caption\n            createdAt\n            isMine\n         }\n      }\n   }\n   \n": types.SeePhotoDocument,
+    "\n   subscription roomUpdates($id: Float!) {\n      roomUpdates(input: { id: $id }) {\n         id\n         payload\n         user {\n            username\n            avatar\n         }\n         read\n      }\n   }\n": types.RoomUpdatesDocument,
     "\n   mutation sendMessage($payload: String!, $roomId: Float, $userId: Float) {\n      sendMessage(input: { payload: $payload, roomId: $roomId, userId: $userId }) {\n         ok\n         error\n         message\n         messages {\n            id\n         }\n      }\n   }\n": types.SendMessageDocument,
     "\n   query seeRoom($id: Float!) {\n      seeRoom(input: { id: $id }) {\n         ok\n         error\n         message\n         room {\n            messages {\n               id\n               payload\n               user {\n                  username\n                  avatar\n               }\n               read\n            }\n         }\n      }\n   }\n": types.SeeRoomDocument,
     "\n               fragment NewMessage on Message {\n                  id\n                  payload\n                  user {\n                     username\n                     avatar\n                  }\n                  read\n               }\n            ": types.NewMessageFragmentDoc,
+    "\n            fragment NewMessage on Message {\n               id\n               payload\n               user {\n                  username\n                  avatar\n               }\n               read\n            }\n         ": types.NewMessageFragmentDoc,
     "\n   query seeRooms {\n      seeRooms {\n         ok\n         message\n         error\n         rooms {\n            ...RoomParts\n         }\n      }\n   }\n   \n": types.SeeRoomsDocument,
     "\n   query searchPhotos($input: SearchPhotosInput!) {\n      searchPhotos(input: $input) {\n         ok\n         error\n         message\n         photos {\n            id\n            file\n         }\n      }\n   }\n": types.SearchPhotosDocument,
     "\n   mutation uploadPhoto($file: Upload!, $caption: String) {\n      uploadPhoto(input: { photoFile: $file, caption: $caption }) {\n         ok\n         error\n         message\n      }\n   }\n": types.UploadPhotoDocument,
@@ -91,6 +93,10 @@ export function graphql(source: "\n   query seePhoto($seePhotoInput: SeePhotoInp
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n   subscription roomUpdates($id: Float!) {\n      roomUpdates(input: { id: $id }) {\n         id\n         payload\n         user {\n            username\n            avatar\n         }\n         read\n      }\n   }\n"): (typeof documents)["\n   subscription roomUpdates($id: Float!) {\n      roomUpdates(input: { id: $id }) {\n         id\n         payload\n         user {\n            username\n            avatar\n         }\n         read\n      }\n   }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n   mutation sendMessage($payload: String!, $roomId: Float, $userId: Float) {\n      sendMessage(input: { payload: $payload, roomId: $roomId, userId: $userId }) {\n         ok\n         error\n         message\n         messages {\n            id\n         }\n      }\n   }\n"): (typeof documents)["\n   mutation sendMessage($payload: String!, $roomId: Float, $userId: Float) {\n      sendMessage(input: { payload: $payload, roomId: $roomId, userId: $userId }) {\n         ok\n         error\n         message\n         messages {\n            id\n         }\n      }\n   }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -100,6 +106,10 @@ export function graphql(source: "\n   query seeRoom($id: Float!) {\n      seeRoo
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n               fragment NewMessage on Message {\n                  id\n                  payload\n                  user {\n                     username\n                     avatar\n                  }\n                  read\n               }\n            "): (typeof documents)["\n               fragment NewMessage on Message {\n                  id\n                  payload\n                  user {\n                     username\n                     avatar\n                  }\n                  read\n               }\n            "];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n            fragment NewMessage on Message {\n               id\n               payload\n               user {\n                  username\n                  avatar\n               }\n               read\n            }\n         "): (typeof documents)["\n            fragment NewMessage on Message {\n               id\n               payload\n               user {\n                  username\n                  avatar\n               }\n               read\n            }\n         "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -47,7 +47,8 @@
       "react-native-web-swiper": "^2.2.4",
       "react-native-webview": "13.2.2",
       "react-query": "^3.39.3",
-      "styled-components": "^5.3.9"
+      "styled-components": "^5.3.9",
+      "subscriptions-transport-ws": "^0.11.0"
    },
    "overrides": {
       "@apollo/client": {
