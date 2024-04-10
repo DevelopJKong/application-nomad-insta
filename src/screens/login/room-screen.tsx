@@ -4,7 +4,7 @@ import { Alert, FlatList, KeyboardAvoidingView, View } from 'react-native';
 import ScreenLayout from '../../components/layout/screen-layout';
 import styled from 'styled-components/native';
 import { useForm } from 'react-hook-form';
-import { SeeRoomOutput } from '../../gql/graphql';
+import { SeeRoomOutput, SendMessageMutation } from '../../gql/graphql';
 import useMe from '../../hooks/use-me';
 
 type TMessageContainer = {
@@ -85,22 +85,25 @@ const TextInput = styled.TextInput`
 const RoomScreen = ({ route, navigation }: any) => {
    const { data: meData } = useMe();
 
-   const { register, setValue, handleSubmit, getValues } = useForm<TForm>();
+   const { register, setValue, handleSubmit, getValues, watch } = useForm<TForm>();
 
    const updateSendMessage = (cache: ApolloCache<any>, result: Omit<FetchResult<any>, 'context'>) => {
+      if (!result.data) return;
       const {
          data: {
             sendMessage: {
                ok,
-               message: { id },
+               messages: { id },
             },
          },
       } = result;
 
       if (ok && meData) {
+         const { message } = getValues();
+         setValue('message', '');
          const messageObj = {
             id,
-            payload: getValues('message'),
+            payload: message,
             user: {
                username: meData.me.user.username,
                avatar: meData.me.avatar,
@@ -187,7 +190,7 @@ const RoomScreen = ({ route, navigation }: any) => {
       >
          <ScreenLayout loading={loading}>
             <FlatList
-               style={{ width: '100%', paddingTop: 10 }}
+               style={{ width: '100%', paddingVertical: 10 }}
                data={data?.seeRoom.room?.messages}
                keyExtractor={(message, index) => `${(message as any)?.id}-${index}`}
                renderItem={renderItem}
@@ -199,6 +202,7 @@ const RoomScreen = ({ route, navigation }: any) => {
                placeholderTextColor='rgba(255,255,255,0.5)'
                returnKeyLabel='Send Message'
                returnKeyType='send'
+               value={watch('message')}
                onChangeText={(text: string) => setValue('message', text)}
                onSubmitEditing={handleSubmit(onValid)}
             />

@@ -4147,6 +4147,18 @@
             "deprecationReason": null
           },
           {
+            "name": "messages",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Message",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ok",
             "description": null,
             "args": [],
