@@ -5,6 +5,7 @@ import ScreenLayout from '../../components/layout/screen-layout';
 import styled from 'styled-components/native';
 import { useForm } from 'react-hook-form';
 import useMe from '../../hooks/use-me';
+import { SendMessageMutation } from '../../gql/graphql';
 
 type TMessageContainer = {
    $outGoing: boolean;
@@ -89,33 +90,33 @@ const RoomScreen = ({ route, navigation }: any) => {
 
    const { register, setValue, handleSubmit, getValues, watch } = useForm<TForm>();
 
-   const updateSendMessage = (cache: ApolloCache<any>, result: Omit<FetchResult<any>, 'context'>) => {
-      console.log('updateSendMessage', JSON.stringify(result, null, 4));
-
+   const updateSendMessage = async (
+      cache: ApolloCache<any>,
+      result: Omit<FetchResult<SendMessageMutation>, 'context'>,
+   ) => {
       if (!result.data) return;
+      if (!result.data.sendMessage.ok) return;
       const {
          data: {
-            sendMessage: {
-               ok,
-               messages: { id },
-            },
+            sendMessage: { ok },
          },
       } = result;
 
-      if (ok && meData) {
+      const id = result?.data?.sendMessage?.messages?.id;
+      console.log('meData?.me?.user?.avatar', meData?.me?.user?.avatar);
+      if (ok && meData && id) {
          const { message } = getValues();
          setValue('message', '');
          const messageObj = {
             id,
             payload: message,
             user: {
-               username: meData.me.user.username,
-               avatar: meData.me.avatar,
+               username: meData?.me?.username ?? '',
+               avatar: meData?.me?.avatar ?? '',
             },
             read: true,
             __typename: 'Message',
          };
-
          const messageFragment = cache.writeFragment({
             fragment: gql`
                fragment NewMessage on Message {
@@ -132,9 +133,9 @@ const RoomScreen = ({ route, navigation }: any) => {
          });
 
          cache.modify({
-            id: `Room:${route?.params?.id}`,
+            id: `Room:${route?.params?.roomId}`,
             fields: {
-               messages(prev: any) {
+               messages(prev) {
                   return [...prev, messageFragment];
                },
             },
@@ -156,7 +157,7 @@ const RoomScreen = ({ route, navigation }: any) => {
    // ! 기본 함수 모음
    const renderItem = ({ item: message }: any) => {
       return (
-         <MessageContainer $outGoing={message.user.username === route?.params?.talkingTo}>
+         <MessageContainer $outGoing={message?.user?.username === route?.params?.talkingTo}>
             <Author>
                <Avatar source={{ uri: message?.user?.avatar }} />
             </Author>
