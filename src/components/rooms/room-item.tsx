@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 type TRoomItemProps = {
    users: any;
    unreadTotal: number;
+   roomId: number;
 };
 
 const RoomContainer = styled.TouchableOpacity`
@@ -45,7 +46,7 @@ const UnreadText = styled.Text`
    font-weight: 500;
 `;
 
-const RoomItem = ({ users, unreadTotal }: TRoomItemProps) => {
+const RoomItem = ({ users, unreadTotal, roomId }: TRoomItemProps) => {
    const { data: user } = useMe();
    const navigation = useNavigation<any>();
    const talkingTo = users?.find((userData: any) => userData.id !== user?.id);
@@ -54,6 +55,7 @@ const RoomItem = ({ users, unreadTotal }: TRoomItemProps) => {
       navigation.navigate('Room', {
          id: talkingTo.id,
          talkingTo: talkingTo,
+         roomId,
       });
 
    return (

@@ -10,7 +10,7 @@
       "ios": "expo start --ios",
       "web": "expo start --web",
       "lint": "eslint \"{src,apps,libs,test}/**/*.{tsx,js,ts}\" --fix",
-      "codegen": "graphql-codegen --config codegen.ts"
+      "codegen": "rimraf src/gql && graphql-codegen --config codegen.ts"
    },
    "dependencies": {
       "@apollo/client": "^3.7.17",

@@ -25,7 +25,7 @@ const RoomsScreen = () => {
    console.log(JSON.stringify(data, null, 4));
 
    const renderItem = ({ item: room }: any) => {
-      return <RoomItem users={room?.users} unreadTotal={room?.unreadTotal ?? 0} />;
+      return <RoomItem users={room?.users} unreadTotal={room?.unreadTotal ?? 0} roomId={room?.id} />;
    };
    return (
       <ScreenLayout loading={loading}>

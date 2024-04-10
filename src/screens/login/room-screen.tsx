@@ -1,10 +1,9 @@
 import { ApolloCache, FetchResult, gql, useMutation, useQuery } from '@apollo/client';
 import React, { useEffect } from 'react';
-import { Alert, FlatList, KeyboardAvoidingView, View } from 'react-native';
+import { FlatList, KeyboardAvoidingView, View } from 'react-native';
 import ScreenLayout from '../../components/layout/screen-layout';
 import styled from 'styled-components/native';
 import { useForm } from 'react-hook-form';
-import { SeeRoomOutput, SendMessageMutation } from '../../gql/graphql';
 import useMe from '../../hooks/use-me';
 
 type TMessageContainer = {
@@ -21,6 +20,9 @@ const SEND_MESSAGE_MUTATION = gql`
          ok
          error
          message
+         messages {
+            id
+         }
       }
    }
 `;
@@ -88,6 +90,8 @@ const RoomScreen = ({ route, navigation }: any) => {
    const { register, setValue, handleSubmit, getValues, watch } = useForm<TForm>();
 
    const updateSendMessage = (cache: ApolloCache<any>, result: Omit<FetchResult<any>, 'context'>) => {
+      console.log('updateSendMessage', JSON.stringify(result, null, 4));
+
       if (!result.data) return;
       const {
          data: {
@@ -145,7 +149,7 @@ const RoomScreen = ({ route, navigation }: any) => {
 
    const { data, loading } = useQuery(ROOM_QUERY, {
       variables: {
-         id: route?.params?.id,
+         id: route?.params?.roomId,
       },
    });
 
@@ -163,10 +167,12 @@ const RoomScreen = ({ route, navigation }: any) => {
 
    const onValid = async ({ message }: TForm) => {
       if (!sendMessageLoading) {
+         console.log(route?.params?.talkingTo);
          await sendMessageMutation({
             variables: {
                payload: message,
-               roomId: route?.params?.id,
+               userId: route?.params?.id,
+               roomId: route?.params?.roomId,
             },
          });
       }
@@ -190,7 +196,7 @@ const RoomScreen = ({ route, navigation }: any) => {
       >
          <ScreenLayout loading={loading}>
             <FlatList
-               style={{ width: '100%', paddingVertical: 10 }}
+               style={{ width: '100%', marginVertical: 10 }}
                data={data?.seeRoom.room?.messages}
                keyExtractor={(message, index) => `${(message as any)?.id}-${index}`}
                renderItem={renderItem}
