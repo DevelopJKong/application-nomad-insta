@@ -1,11 +1,13 @@
 import { Photo, SeeFeedOutput } from './gql/graphql';
-import { ApolloClient, InMemoryCache, makeVar } from '@apollo/client';
+import { ApolloClient, InMemoryCache, makeVar, split } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import _ from 'lodash';
 import { createUploadLink } from 'apollo-upload-client';
 import { BACKEND_URL } from './common/constants/global-constant';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
 
 export const isLoggedInVar = makeVar(false);
 export const tokenVar = makeVar('');
@@ -32,6 +34,16 @@ const customFetch = async (uri: any, options: any) => {
       return response;
    });
 };
+
+const wsLink = new WebSocketLink({
+   uri: `ws://${BACKEND_URL}:8000/graphql`,
+   options: {
+      reconnect: true,
+      connectionParams: {
+         'x-jwt': tokenVar() || '',
+      },
+   },
+});
 
 const uploadHttpLink = createUploadLink({
    uri: `http://${BACKEND_URL}:8000/graphql`,
@@ -82,8 +94,19 @@ export const cache = new InMemoryCache({
    },
 });
 
+const httpLinks = authLink.concat(onErrorLink).concat(uploadHttpLink);
+
+const splitLink = split(
+   ({ query }) => {
+      const definition = getMainDefinition(query);
+      return definition.kind === 'OperationDefinition' && definition.operation === 'subscription';
+   },
+   wsLink,
+   httpLinks,
+);
+
 const client = new ApolloClient({
-   link: authLink.concat(onErrorLink).concat(uploadHttpLink),
+   link: splitLink,
    cache,
 });
 export default client;
